@@ -952,13 +952,52 @@ html:has(.page-head--light), html:has(.page-head--light) body { background: var(
 }
 
 @media (min-width: 761px) {
-  /* Home su computer: menu al centro della barra, social prima della linea e poi le voci */
-  .hero .bar { display: grid; grid-template-columns: 1fr auto 1fr; }
-  .hero .bar__end { grid-column: 2; }
-  .hero .social {
-    order: -1;
-    padding: 0 var(--u3) 0 0;
-    border-left: 0;
-    border-right: 1px solid rgba(251, 246, 238, .3);
-  }
+  /* Home su computer: il gruppo resta attaccato al bordo destro, ma con più spazio tra le voci
+     si allunga verso il centro della barra */
+  .hero .bar__end { gap: var(--u5); }
+  .hero .nav { gap: var(--u5); }
 }
+@media (min-width: 761px) and (max-width: 1000px) {
+  .hero .bar__end, .hero .nav { gap: var(--u3); }
+}
+
+@media (min-width: 761px) {
+  /* Prova: anche su computer logo, menu e social stanno su una barra crema in alto, come su telefono */
+  .hero { padding-top: 0; }
+  .hero .bar {
+    margin: 0 calc(-1 * var(--u4));
+    padding: var(--u2) var(--u4);
+    background: var(--cream);
+    box-shadow: 0 1px 0 var(--line);
+  }
+  .hero .brand__light { display: none !important; }
+  .hero .brand__dark { display: block !important; }
+  .hero .nav__link { color: var(--muted); text-shadow: none; }
+  .hero .nav__link[aria-current="page"] { color: var(--text); }
+  @media (hover: hover) and (pointer: fine) {
+    .hero .nav__link:hover { color: var(--text); }
+  }
+  .hero .nav__link:active, .hero .nav__link.is-pressed { color: var(--wine-deep); }
+  .hero .nav__link:focus-visible { outline-color: var(--text); }
+  .hero .social { border-left-color: var(--line); }
+  .hero .social__link { color: var(--muted); }
+  @media (hover: hover) and (pointer: fine) {
+    .hero .social__link:hover { color: var(--text); }
+  }
+  .hero .social__link:active { color: var(--wine-deep); }
+  .hero .social__link:focus-visible { outline-color: var(--text); }
+}
+
+/* Barra della home: crema più caldo e un po' trasparente, la foto si intravede sotto */
+.hero .bar { background: rgba(248, 241, 231, .32); }
+@supports ((-webkit-backdrop-filter: blur(1px)) or (backdrop-filter: blur(1px))) {
+  .hero .bar { -webkit-backdrop-filter: blur(10px) saturate(1.1); backdrop-filter: blur(10px) saturate(1.1); }
+}
+@media (max-width: 760px) { .hero .bar { background: rgba(248, 241, 231, .32); } }
+/* sulla barra trasparente il marrone tenue si legge poco: voci e icone un tono più scuro */
+.hero .bar .nav__link, .hero .bar .social__link { color: var(--text); }
+.hero .bar .nav__link[aria-current="page"] { color: var(--text); }
+@media (max-width: 760px) { .hero .social__link { color: var(--ink); } }
+/* niente riga sotto la barra della home */
+.hero .bar { box-shadow: none !important; }
+@media (max-width: 760px) { .hero .bar .social__link { color: var(--ink); } }
