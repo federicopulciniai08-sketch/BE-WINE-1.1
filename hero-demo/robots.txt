@@ -1,2 +1,4 @@
 User-agent: *
-Disallow: /
+Allow: /
+
+Sitemap: https://bewine-anteprima.vercel.app/sitemap.xml

@@ -1001,3 +1001,7 @@ html:has(.page-head--light), html:has(.page-head--light) body { background: var(
 /* niente riga sotto la barra della home */
 .hero .bar { box-shadow: none !important; }
 @media (max-width: 760px) { .hero .bar .social__link { color: var(--ink); } }
+
+/* Link del piede: area da toccare di almeno 32 px di altezza, con spazio tra i vicini */
+.footer__link { display: inline-block; padding: var(--u1) 0; }
+.footer p .footer__link + .footer__link { margin-left: var(--u1); }
