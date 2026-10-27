@@ -1,0 +1,59 @@
+OBIETTIVO
+Costruisci il sito completo di una vineria enoteca, in HTML, CSS e JS statici, pronto per Vercel, partendo dalla hero gia' approvata in demosito7/index.html. La hero non va ridisegnata: e' la base da cui deriva tutto il resto (stessi font, stessi colori, stesso tono).
+
+NON usare skill di design (impeccable, ui-ux-pro-max, frontend-design, skillpulcinidesign) e non lanciare consigli di giudici o revisori. Questa e' una prova del metodo "riferimento prima di tutto": segui solo questo documento.
+
+FILE CHE TROVI
+- demosito7/index.html e demosito7/img/hero.jpg: hero approvata.
+- enoteca-brief/riferimenti/: screenshot dei siti di riferimento (desktop e mobile), numerati. Il file riferimenti/LEGGIMI.txt, se presente, dice quale riferimento vale per quale sezione.
+- enoteca-brief/foto/: foto del locale e dei vini. Usa SOLO queste e quelle gia' nel progetto.
+- Dati del cliente: compila il blocco DATI qui sotto. Dove un dato manca, scrivi un segnaposto visibile tra parentesi quadre, per esempio [ORARI DA CONFERMARE]. Non inventare mai indirizzi, telefoni, premi, recensioni, numeri o storie.
+
+DATI (da compilare prima di avviare)
+Nome: Enoteca Rossi (segnaposto)
+Citta' e indirizzo: [DA COMPLETARE]
+Anno di fondazione: 1987 (segnaposto)
+Telefono / email / social: [DA COMPLETARE]
+Orari: [DA COMPLETARE]
+Gli scacchi fanno parte dell'identita' del locale: SI / NO  (se NO, non nominarli e non farli comparire nei testi)
+Vini e categorie principali: [DA COMPLETARE]
+Serate o eventi: [DA COMPLETARE]
+
+METODO (rispettalo in quest'ordine)
+1. Leggi la hero esistente e guarda tutti i riferimenti. Per ogni riferimento scrivi una descrizione tecnica breve: griglia, rapporto tra le dimensioni dei titoli e del testo, spazi tra le sezioni, uso delle immagini, uso del colore. Non scrivere "ispirato a": scrivi cosa imiti, con numeri.
+2. Proponi la sequenza di sezioni e per ognuna indica quale riferimento ne guida la struttura. Poi procedi senza chiedere conferma.
+3. Costruisci UNA sezione alla volta. Dopo ogni sezione: apri il sito in locale, fai screenshot a 1440 px e a 390 px, confrontalo col riferimento e correggi. Fai almeno 2 giri di confronto per sezione. Alla domanda "cosa differisce dal riferimento?" rispondi con difetti concreti, non con principi generici.
+4. Alla fine controlla l'intera pagina a 390, 768, 1440 e 1920 px.
+5. Non fermarti a fare domande, a meno che manchi qualcosa che blocca il lavoro. Segnala invece i segnaposto nel report finale.
+
+SEZIONI (sotto la hero)
+- La selezione: i vini per categoria o per zona, con il prodotto al centro. Niente prezzi in evidenza.
+- Degustazioni e serate (solo se i dati le contengono; la scacchiera solo se confermata).
+- La storia: breve, concreta, solo con fatti forniti.
+- Dove siamo, orari e prenotazione: azione chiara, numero e mappa come collegamento.
+- Piede della pagina: sobrio, con dati di contatto.
+Se un riferimento suggerisce un'altra sequenza migliore, puoi cambiarla, motivandolo in una riga.
+
+REGOLE DI DESIGN
+- Font: Instrument Serif per titoli e DM Sans per tutto il resto. Nessun terzo font. Nessun corsivo, mai (nemmeno nei titoli o per enfasi).
+- Colore: la hero usa il rosso vino #e8606f come unico accento sullo scuro. Sotto la hero usa UN solo sfondo chiaro caldo (tipo avorio) con testo molto scuro, e riprendi un rosso vino piu' scuro come accento su sfondo chiaro, verificando il contrasto (minimo 4.5:1). Niente gradienti decorativi, niente forme astratte, niente emoji.
+- Titoli grandi in serif con interlinea stretta, come nella hero. Etichette e navigazione piccole, in maiuscolo, in DM Sans.
+- Layout: spazi ampi, allineamenti netti, una griglia dichiarata e rispettata. Vietati: tre card uguali con icona, contatori di numeri, sezione di recensioni, banner di benvenuto, carosello automatico.
+- Movimento: solo comparsa leggera allo scroll e transizioni brevi su pulsanti e collegamenti. Rispetta prefers-reduced-motion.
+- Immagini: ogni immagine deve essere nitida, senza filtri e senza bordi incorporati. Se ti serve una foto che non esiste, generala con lo strumento di immagini di Canva (orizzontale, almeno 1920 px di larghezza, luce calda laterale, nessun filtro vintage) e dichiara quali immagini sono generate. Mai usare immagini sgranate o stirate.
+
+TESTI
+- Italiano curato, cortese, concreto. Parla del prodotto, non dei prezzi.
+- Nessuno slogan, nessun motto, nessuna frase da brochure ("passione", "tradizione e innovazione", "benvenuti"). Titoli di sezione come nomi di cose reali: "I vini", "Le serate", "Dove siamo".
+- Ogni affermazione deve poggiare su un dato che trovi nei DATI. Altrimenti usa un segnaposto.
+
+REQUISITI TECNICI
+- HTML semantico, un solo h1, ordine corretto dei titoli, alt in italiano su ogni immagine, link di salto al contenuto, focus visibile, aree di tocco di almeno 44 px.
+- Immagini con width e height, lazy loading sotto la prima schermata, formati adatti (jpg o webp compressi).
+- Meta title e description, Open Graph, dati strutturati LocalBusiness con i soli campi noti.
+- Nessuno scroll orizzontale a nessuna larghezza. Verifica con document.documentElement.scrollWidth == innerWidth.
+- Controlla che i font siano caricati (document.fonts.ready) prima di ogni screenshot, e che la console non abbia errori.
+- Avvia un server locale (python -m http.server) per le verifiche. Struttura finale in demosito7/: index.html, css/, js/, img/.
+
+CONSEGNA
+Alla fine scrivi un report breve: sezioni costruite e riferimento usato per ciascuna, elenco dei segnaposto da completare, elenco delle immagini generate, limiti noti (per esempio risoluzione delle foto). Non descrivere le cose ovvie. Se qualcosa non ti convince, dillo.

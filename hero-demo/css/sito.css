@@ -1,0 +1,883 @@
+/* Be Wine: stili comuni a tutte le pagine */
+:root {
+  --ink: #fbf6ee;
+  --wine: #e8606f;
+  --wine-soft: #f3a3ab;
+  --wine-deep: #7a1f2c;  /* vino scuro per il piede e i dettagli sul crema */
+  --cream: #fbf7f0;      /* crema chiarissimo, quasi bianco */
+  --text: #2a1810;
+  --muted: #7a5f50;
+  --line: #e6dccd;
+  --dark: #1b0f09;
+  --shade: 22, 12, 7;
+  --serif: "Instrument Serif", Georgia, serif;
+  --sans: "DM Sans", system-ui, sans-serif;
+  /* parte veloce e si posa piano */
+  --ease-out: cubic-bezier(.23, 1, .32, 1);
+  /* torna indietro con un piccolo rimbalzo */
+  --ease-spring: cubic-bezier(.34, 1.56, .64, 1);
+
+  /* Scala: ogni livello è il doppio del precedente */
+  --t1: 12px;  /* menu, stelle, bottoni */
+  --t2: 24px;  /* sottotitolo */
+  --t3: 120px; /* titolo: 5 volte il sottotitolo */
+  --t4: 48px;  /* titoli delle sezioni */
+  --u1: 6px;
+  --u2: 12px;
+  --u3: 24px;
+  --u4: 48px;
+  --u5: 96px;
+  --logo: 48px;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html, body { background: var(--dark); }
+body { font-family: var(--sans); color: var(--ink); }
+
+.hero {
+  position: relative;
+  min-height: 100vh;
+  min-height: 100svh;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: var(--u3) var(--u4) var(--u4);
+  overflow: hidden;
+  isolation: isolate;
+}
+.hero__photo {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: 72% 50%;
+  z-index: -2;
+}
+.hero::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background:
+    radial-gradient(ellipse 60% 55% at 50% 55%, rgba(var(--shade), .62) 0%, rgba(var(--shade), .32) 60%, rgba(var(--shade), .18) 100%),
+    linear-gradient(180deg, rgba(var(--shade), .45) 0%, rgba(var(--shade), 0) 22%);
+}
+
+.bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--u3);
+}
+.brand { display: block; line-height: 0; }
+.brand img { display: block; height: var(--logo); width: auto; }
+
+/* ---------- Menu: tre stati (riposo, passaggio del mouse, clic) ---------- */
+.nav {
+  display: flex;
+  gap: var(--u4);
+  list-style: none;
+}
+.nav__link {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  min-height: 48px;
+  font-weight: 700;
+  font-size: var(--t1);
+  letter-spacing: .13em;
+  text-transform: uppercase;
+  /* 1. riposo: un filo più tenue, così il passaggio del mouse si nota */
+  color: rgba(251, 246, 238, .82);
+  text-decoration: none;
+  text-shadow: 0 1px 12px rgba(var(--shade), .55);
+  transform: scale(1);
+  /* il ritorno dal clic è più lento e rimbalza un poco */
+  transition:
+    color 200ms linear,
+    transform 450ms var(--ease-spring);
+}
+.nav__link::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 8px;
+  height: 1.5px;
+  background: currentColor;
+  transform: scaleX(0);
+  transform-origin: right center;
+  transition: transform 280ms var(--ease-out);
+}
+
+/* 2. passaggio del mouse: testo pieno e una linea che entra da sinistra */
+@media (hover: hover) and (pointer: fine) {
+  .nav__link:hover { color: var(--ink); }
+  .nav__link:hover::after {
+    transform: scaleX(1);
+    transform-origin: left center;
+  }
+}
+.nav__link:focus-visible {
+  color: var(--ink);
+  outline: 2px solid var(--ink);
+  outline-offset: 6px;
+  border-radius: 2px;
+}
+
+/* 3. clic: colore più caldo e il tasto si ingrandisce sotto il dito */
+.nav__link:active,
+.nav__link.is-pressed {
+  color: var(--wine-soft);
+  transform: scale(1.08);
+  transition:
+    color 80ms linear,
+    transform 140ms var(--ease-out);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .nav__link, .nav__link::after { transition-duration: 0s !important; }
+  .nav__link:active, .nav__link.is-pressed { transform: none; }
+}
+
+/* ---------- Testo della hero ---------- */
+/* testo al centro della foto, sia in orizzontale che in verticale */
+.copy {
+  margin: auto;
+  max-width: 1100px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+h1 {
+  font-family: var(--serif);
+  font-weight: 400;
+  font-size: var(--t3);
+  line-height: 1;
+  letter-spacing: -.01em;
+}
+.rating {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--u1);
+  margin-bottom: var(--u3);
+  font-size: var(--t1);
+  font-weight: 700;
+  letter-spacing: .13em;
+  text-transform: uppercase;
+}
+.rating svg { width: var(--t1); height: var(--t1); fill: #f4c15d; flex: none; }
+h1 span { display: block; }
+h1 .fact { color: var(--wine); }
+
+.sub {
+  margin-top: var(--u3);
+  max-width: 24em;
+  font-size: var(--t2);
+  line-height: 1.4;
+  font-weight: 500;
+}
+.actions { margin-top: var(--u4); display: flex; justify-content: center; gap: var(--u2); flex-wrap: wrap; }
+.btn {
+  display: inline-flex;
+  align-items: center;
+  min-height: 48px;
+  padding: 0 var(--u3);
+  border: 1px solid var(--ink);
+  border-radius: 999px;
+  font-weight: 700;
+  font-size: var(--t1);
+  letter-spacing: .14em;
+  text-transform: uppercase;
+  color: var(--ink);
+  text-decoration: none;
+  transition: background .2s ease, color .2s ease;
+}
+.btn--solid { background: var(--ink); color: #2a1810; }
+.btn:hover, .btn:focus-visible { background: var(--wine); border-color: var(--wine); color: var(--dark); outline: none; }
+.btn--dark { border-color: var(--text); color: var(--text); }
+.btn--dark:hover, .btn--dark:focus-visible { background: var(--wine-deep); border-color: var(--wine-deep); color: var(--ink); }
+
+/* ---------- Sotto la hero: fondo crema chiarissimo ---------- */
+main { background: var(--cream); color: var(--text); }
+.section { padding: var(--u5) var(--u4); }
+.label {
+  margin-bottom: var(--u3);
+  font-size: var(--t1);
+  font-weight: 700;
+  letter-spacing: .13em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+.title {
+  font-family: var(--serif);
+  font-weight: 400;
+  font-size: var(--t4);
+  line-height: 1.05;
+  letter-spacing: -.005em;
+}
+.title .fact { color: var(--wine-deep); }
+.lead {
+  margin: var(--u3) 0 var(--u4);
+  max-width: 30em;
+  font-size: var(--t2);
+  line-height: 1.5;
+  font-weight: 500;
+}
+
+/* Chi siamo: foto a lato, testo accanto */
+.about {
+  display: grid;
+  grid-template-columns: 5fr 6fr;
+  gap: var(--u5);
+  align-items: center;
+  max-width: 1440px;
+  margin: 0 auto;
+}
+.about__photo img {
+  display: block;
+  width: 100%;
+  height: auto;
+  aspect-ratio: 830 / 1030;
+  object-fit: cover;
+}
+.about .lead { font-size: var(--t2); }
+
+/* Recensioni */
+.reviews {
+  max-width: 1440px;
+  margin: 0 auto;
+  border-top: 1px solid var(--line);
+}
+.reviews__list {
+  list-style: none;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: var(--u4);
+  margin: var(--u4) 0;
+}
+.review {
+  display: flex;
+  flex-direction: column;
+  padding-top: var(--u3);
+  border-top: 2px solid var(--wine-deep);
+}
+.review__stars { font-size: var(--t1); letter-spacing: .2em; color: #c8962e; }
+.review__off { color: var(--line); }
+.review__quote {
+  margin: var(--u3) 0;
+  font-family: var(--serif);
+  font-size: var(--t2);
+  line-height: 1.35;
+  flex: 1;
+}
+.review__author {
+  font-size: var(--t1);
+  font-weight: 700;
+  letter-spacing: .13em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+/* ---------- Piede color vino ---------- */
+.footer {
+  background: var(--wine-deep);
+  color: var(--ink);
+  padding: var(--u5) var(--u4) var(--u4);
+  font-size: var(--t1);
+  line-height: 2;
+  letter-spacing: .02em;
+}
+.footer__grid {
+  display: grid;
+  grid-template-columns: 2fr 1fr 1fr 1fr;
+  gap: var(--u4);
+  max-width: 1440px;
+  margin: 0 auto;
+}
+.footer__brand img { display: block; height: var(--u4); width: auto; margin-bottom: var(--u3); }
+.footer__brand p { max-width: 20em; opacity: .85; }
+.footer__label {
+  margin-bottom: var(--u2);
+  font-weight: 700;
+  letter-spacing: .13em;
+  text-transform: uppercase;
+  opacity: .7;
+}
+.footer p + p { margin-top: var(--u2); }
+.footer__link {
+  color: var(--ink);
+  text-decoration: underline;
+  text-decoration-color: rgba(251, 246, 238, .4);
+  text-underline-offset: 3px;
+  transition: text-decoration-color 200ms linear;
+}
+.footer__link:hover, .footer__link:focus-visible { text-decoration-color: var(--ink); }
+.footer__legal {
+  display: flex;
+  justify-content: space-between;
+  gap: var(--u3);
+  flex-wrap: wrap;
+  max-width: 1440px;
+  margin: var(--u5) auto 0;
+  padding-top: var(--u3);
+  border-top: 1px solid rgba(251, 246, 238, .25);
+  opacity: .85;
+}
+.footer__legal nav { display: flex; gap: var(--u3); }
+
+@media (max-width: 1000px) {
+  .reviews__list { grid-template-columns: 1fr; gap: var(--u4); }
+  .footer__grid { grid-template-columns: 1fr 1fr; }
+}
+
+@media (max-width: 760px) {
+  :root {
+    --t1: 12px; --t2: 24px; --t3: 60px; --t4: 36px;
+    --u1: 6px; --u2: 12px; --u3: 24px; --u4: 48px; --u5: 72px;
+    --logo: 36px;
+  }
+  .section { padding: var(--u5) var(--u3); }
+  .about { grid-template-columns: 1fr; gap: var(--u4); }
+  .footer { padding: var(--u5) var(--u3) var(--u4); }
+  .footer__grid { grid-template-columns: 1fr; }
+  .hero { padding: var(--u3) var(--u3) var(--u4); }
+  /* su telefono il menu va su una riga sua, sotto il logo, con tutte le voci */
+  .bar { flex-wrap: wrap; row-gap: var(--u2); }
+  .nav { width: 100%; justify-content: space-between; gap: 0; }
+  .hero__photo { object-position: 78% 50%; }
+  .hero::before {
+    background:
+      linear-gradient(0deg, rgba(var(--shade), .88) 0%, rgba(var(--shade), .6) 45%, rgba(var(--shade), .15) 100%);
+  }
+}
+
+/* ================= Pagine interne ================= */
+
+/* Testata scura con la foto della hero molto in ombra */
+.page-head {
+  position: relative;
+  padding: var(--u3) var(--u4) var(--u5);
+  overflow: hidden;
+  isolation: isolate;
+  background: var(--dark);
+}
+.page-head__photo {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: 72% 50%;
+  z-index: -2;
+}
+.page-head::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background:
+    radial-gradient(ellipse 60% 60% at 50% 55%, rgba(var(--shade), .82) 0%, rgba(var(--shade), .66) 70%, rgba(var(--shade), .55) 100%),
+    linear-gradient(180deg, rgba(var(--shade), .5) 0%, rgba(var(--shade), 0) 25%);
+}
+/* come la home: titolo al centro della foto */
+.page-head {
+  display: flex;
+  flex-direction: column;
+  min-height: 64vh;
+  min-height: 64svh;
+}
+.page-head__copy {
+  margin: auto;
+  padding-top: var(--u4);
+  max-width: 1100px;
+  text-align: center;
+}
+.page-head h1 {
+  font-family: var(--serif);
+  font-weight: 400;
+  font-size: calc(var(--t2) * 4);
+  line-height: 1;
+  letter-spacing: -.01em;
+}
+.page-head h1 .fact { color: var(--wine); }
+.page-head .sub { margin: var(--u3) auto 0; max-width: 24em; }
+
+@media (max-width: 760px) {
+  .page-head { padding: var(--u3) var(--u3) var(--u4); }
+  .page-head h1 { font-size: var(--t3); }
+}
+
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+}
+
+/* ================= Pagina Cantine ================= */
+.cantine { max-width: 1440px; margin: 0 auto; }
+.draft-note {
+  margin-bottom: var(--u4);
+  padding: var(--u2) var(--u3);
+  border-left: 2px solid var(--wine-deep);
+  background: #fff;
+  font-size: var(--t1);
+  line-height: 1.8;
+  color: var(--muted);
+}
+
+/* Filtro per regione: testo come il menu, senza pillole */
+.filters { display: flex; flex-wrap: wrap; gap: var(--u2) var(--u4); margin-bottom: var(--u4); }
+.filter {
+  position: relative;
+  min-height: var(--u4);
+  padding: 0;
+  border: 0;
+  background: none;
+  font: 700 var(--t1)/1 var(--sans);
+  letter-spacing: .13em;
+  text-transform: uppercase;
+  color: var(--muted);
+  cursor: pointer;
+  transition: color 200ms linear, transform 450ms var(--ease-spring);
+}
+.filter::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 12px;
+  height: 1.5px;
+  background: currentColor;
+  transform: scaleX(0);
+  transform-origin: right center;
+  transition: transform 280ms var(--ease-out);
+}
+@media (hover: hover) and (pointer: fine) {
+  .filter:hover { color: var(--text); }
+}
+.filter[aria-pressed="true"] { color: var(--wine-deep); }
+.filter[aria-pressed="true"]::after { transform: scaleX(1); transform-origin: left center; }
+.filter:active { transform: scale(1.08); transition-duration: 80ms, 140ms; }
+.filter:focus-visible { outline: 2px solid var(--text); outline-offset: 4px; }
+
+/* Soprannome della cantina, sopra il nome */
+.producer__nick,
+.tile__nick {
+  display: block;
+  font-size: var(--t1);
+  font-weight: 700;
+  letter-spacing: .13em;
+  text-transform: uppercase;
+  color: var(--wine-deep);
+}
+
+/* ---------- Versione griglia ---------- */
+.grid {
+  list-style: none;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: var(--u4) var(--u3);
+}
+.grid li[hidden] { display: none; }
+.tile {
+  display: block;
+  width: 100%;
+  padding: 0;
+  border: 0;
+  background: none;
+  text-align: left;
+  color: var(--text);
+  font-family: var(--sans);
+  cursor: pointer;
+}
+.tile__media {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  aspect-ratio: 4 / 5;
+  margin-bottom: var(--u3);
+  padding: var(--u3);
+  overflow: hidden;
+  background: #efe6d8;
+  transition: transform 450ms var(--ease-spring), background-color 200ms linear;
+}
+.tile__region { font-size: var(--t1); font-weight: 700; letter-spacing: .13em; text-transform: uppercase; color: var(--muted); }
+.tile__label { font: 400 var(--t2)/1.2 var(--serif); color: var(--muted); }
+.tile__hint { font-size: var(--t1); letter-spacing: .08em; text-transform: uppercase; color: var(--muted); opacity: .6; }
+.tile__name { display: block; margin-top: var(--u1); font: 400 var(--t2)/1.2 var(--serif); }
+.tile__zone { display: block; margin-top: var(--u1); font-size: var(--t1); color: var(--muted); }
+@media (hover: hover) and (pointer: fine) {
+  .tile:hover .tile__media { background: #e8dcc9; transform: translateY(-6px); }
+}
+.tile:active .tile__media { transform: scale(.98); transition-duration: 140ms, 200ms; }
+.tile:focus-visible { outline: 2px solid var(--text); outline-offset: 6px; }
+
+/* ---------- Scheda della cantina ---------- */
+.sheet {
+  width: min(720px, calc(100% - var(--u4)));
+  max-height: calc(100% - var(--u4));
+  margin: auto;
+  padding: var(--u4);
+  border: 0;
+  background: var(--cream);
+  color: var(--text);
+  box-shadow: 0 24px 80px -24px rgba(var(--shade), .6);
+}
+.sheet::backdrop { background: rgba(var(--shade), .55); }
+.sheet[open] { animation: sheet-in 320ms var(--ease-out); }
+@keyframes sheet-in { from { opacity: 0; transform: translateY(24px); } }
+.sheet__close {
+  position: absolute;
+  top: var(--u2);
+  right: var(--u2);
+  width: var(--u4);
+  height: var(--u4);
+  border: 0;
+  background: none;
+  font: 400 var(--t4)/1 var(--serif);
+  color: var(--text);
+  cursor: pointer;
+}
+.sheet__name { margin-top: var(--u2); font: 400 var(--t4)/1.05 var(--serif); }
+.sheet__text { margin: var(--u3) 0; font-size: var(--t2); line-height: 1.5; font-weight: 500; }
+.sheet__meta { margin-bottom: var(--u3); }
+.sheet__meta div { display: flex; justify-content: space-between; gap: var(--u3); padding: var(--u2) 0; border-bottom: 1px solid var(--line); }
+.sheet__meta dt { font-size: var(--t1); font-weight: 700; letter-spacing: .13em; text-transform: uppercase; color: var(--muted); }
+.sheet__meta dd { font: 400 var(--t2)/1.2 var(--serif); text-align: right; }
+@media (prefers-reduced-motion: reduce) { .sheet[open] { animation: none; } }
+
+/* ---------- Versione mappa ---------- */
+.atlas {
+  display: grid;
+  grid-template-columns: 5fr 7fr;
+  gap: var(--u5);
+  align-items: start;
+}
+.atlas__map { position: sticky; top: var(--u4); }
+.atlas__map svg { display: block; width: 100%; height: auto; max-height: calc(100vh - var(--u5)); }
+.atlas__map path {
+  fill: #ece3d4;
+  stroke: var(--cream);
+  stroke-width: 1.5;
+  transition: fill 200ms linear, opacity 200ms linear;
+}
+.atlas__map path.has-wine { fill: var(--wine-deep); cursor: pointer; }
+.atlas__map path.has-wine {
+  transform-box: fill-box;
+  transform-origin: center;
+  transition: fill 200ms linear, opacity 200ms linear, transform 450ms var(--ease-spring), filter 280ms var(--ease-out);
+}
+@media (hover: hover) and (pointer: fine) {
+  /* la regione si alza un poco verso chi la guarda */
+  .atlas__map path.has-wine:hover {
+    fill: #9b2c3c;
+    opacity: 1;
+    transform: translateY(-4px) scale(1.04);
+    filter: drop-shadow(0 8px 10px rgba(var(--shade), .28));
+  }
+}
+.atlas__tip {
+  position: absolute;
+  left: 0;
+  top: 0;
+  z-index: 2;
+  padding: var(--u2) var(--u3);
+  background: var(--text);
+  color: var(--ink);
+  font-size: var(--t1);
+  font-weight: 700;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+  white-space: nowrap;
+  pointer-events: none;
+  opacity: 0;
+  transform: translate(-50%, calc(-100% - 8px)) scale(.96);
+  transition: opacity 160ms linear, transform 220ms var(--ease-out);
+}
+.atlas__tip.is-on { opacity: 1; transform: translate(-50%, calc(-100% - 16px)) scale(1); }
+@media (prefers-reduced-motion: reduce) {
+  .atlas__map path.has-wine:hover { transform: none; }
+}
+.atlas__map svg.has-selection path.has-wine:not(.is-active) { opacity: .35; }
+.atlas__map path:focus-visible { outline: none; stroke: var(--text); stroke-width: 3; }
+.atlas__credit { margin-top: var(--u2); font-size: var(--t1); color: var(--muted); opacity: .7; }
+.atlas__head { display: flex; align-items: baseline; justify-content: space-between; gap: var(--u3); margin-bottom: var(--u3); }
+.atlas__head .label { margin: 0; }
+.atlas__list { list-style: none; border-top: 1px solid var(--line); }
+.card {
+  display: block;
+  width: 100%;
+  padding: var(--u3) 0;
+  border: 0;
+  border-bottom: 1px solid var(--line);
+  background: none;
+  text-align: left;
+  color: var(--text);
+  font-family: var(--sans);
+  cursor: pointer;
+}
+.card > span:first-child { display: block; transition: transform 280ms var(--ease-out); }
+.card__name { display: block; margin-top: var(--u1); font: 400 var(--t4)/1.05 var(--serif); }
+.card__try { display: block; margin-top: var(--u2); font-size: var(--t1); color: var(--text); }
+@media (hover: hover) and (pointer: fine) {
+  .card:hover > span:first-child { transform: translateX(var(--u3)); }
+  .card:hover .card__name { color: var(--wine-deep); }
+}
+.card:focus-visible { outline: 2px solid var(--text); outline-offset: 4px; }
+
+.text-link {
+  font: 700 var(--t1)/1 var(--sans);
+  letter-spacing: .13em;
+  text-transform: uppercase;
+  color: var(--text);
+  text-decoration: underline;
+  text-decoration-color: var(--line);
+  text-underline-offset: 4px;
+}
+.text-link:hover { text-decoration-color: var(--text); }
+
+.cantine__cta { margin-top: var(--u5); padding-top: var(--u4); border-top: 1px solid var(--line); }
+
+@media (max-width: 1000px) {
+  .grid { grid-template-columns: repeat(3, 1fr); }
+  .atlas { grid-template-columns: 1fr 1fr; gap: var(--u4); }
+}
+@media (max-width: 760px) {
+  .grid { grid-template-columns: repeat(2, 1fr); gap: var(--u3) var(--u2); }
+  .tile__media { padding: var(--u2); }
+  .tile__label { font-size: var(--t1); }
+  .atlas { grid-template-columns: 1fr; }
+  .atlas__map { position: relative; top: auto; max-width: 280px; margin: 0 auto; }
+  .card__name { font-size: var(--t2); }
+  .sheet { padding: var(--u4) var(--u3) var(--u3); }
+  .filters { gap: 0 var(--u3); }
+}
+
+/* ================= Pagina L'enoteca ================= */
+.shop { max-width: 1440px; margin: 0 auto; }
+.shop__block + .shop__block { margin-top: var(--u5); padding-top: var(--u4); border-top: 1px solid var(--line); }
+.shop__head { margin-bottom: var(--u4); }
+.grid--products .tile { cursor: default; }
+.tile__media--photo { padding: 0; }
+.tile__media--photo img { display: block; width: 100%; height: 100%; object-fit: cover; transition: transform 600ms var(--ease-out); }
+@media (hover: hover) and (pointer: fine) {
+  .grid--products .tile:hover .tile__media { transform: none; }
+  .grid--products .tile:hover .tile__media--photo img { transform: scale(1.04); }
+}
+
+/* Vini · Birre · Distillati: grandi, in serif */
+.tabs { display: flex; flex-wrap: wrap; gap: var(--u2) var(--u4); }
+.tab {
+  position: relative;
+  padding: 0 0 var(--u1);
+  border: 0;
+  background: none;
+  font: 400 var(--t4)/1.1 var(--serif);
+  color: var(--muted);
+  cursor: pointer;
+  transition: color 200ms linear, transform 450ms var(--ease-spring);
+}
+.tab::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 2px;
+  background: var(--wine-deep);
+  transform: scaleX(0);
+  transform-origin: right center;
+  transition: transform 280ms var(--ease-out);
+}
+@media (hover: hover) and (pointer: fine) {
+  .tab:hover { color: var(--text); }
+}
+.tab[aria-selected="true"] { color: var(--text); }
+.tab[aria-selected="true"]::after { transform: scaleX(1); transform-origin: left center; }
+.tab:active { transform: scale(1.04); transition-duration: 80ms, 140ms; }
+.tab:focus-visible { outline: 2px solid var(--text); outline-offset: 4px; }
+.filters[hidden] { display: none; }
+
+/* Alla spina: foto e testo affiancati */
+.tap { display: grid; grid-template-columns: 5fr 7fr; gap: var(--u5); align-items: center; }
+.tap__photo img { display: block; width: 100%; height: auto; aspect-ratio: 4 / 5; object-fit: cover; }
+.tap__list { list-style: none; margin: var(--u4) 0 var(--u3); border-top: 1px solid var(--line); }
+.tap__list li {
+  display: flex;
+  justify-content: space-between;
+  gap: var(--u3);
+  padding: var(--u3) 0;
+  border-bottom: 1px solid var(--line);
+  font: 400 var(--t2)/1.2 var(--serif);
+}
+.tap__list span {
+  font: 700 var(--t1)/1.8 var(--sans);
+  letter-spacing: .13em;
+  text-transform: uppercase;
+  color: var(--wine-deep);
+}
+
+@media (max-width: 760px) {
+  .tap { grid-template-columns: 1fr; gap: var(--u4); }
+  .tabs { gap: var(--u1) var(--u3); }
+}
+.page-head h1 .fact--inline { display: inline; }
+
+/* ================= Prova: enoteca unita ================= */
+.atlas__map path.has-wine.is-dim { opacity: .3; }
+.card--bottles { display: flex; align-items: center; justify-content: space-between; gap: var(--u3); }
+.card__thumbs { display: flex; gap: var(--u1); flex: none; }
+.card__thumbs img { display: block; width: 48px; height: 60px; object-fit: cover; }
+.sheet__bottles { list-style: none; margin-top: var(--u2); }
+.sheet__bottles li { display: flex; align-items: center; gap: var(--u3); padding: var(--u2) 0; border-bottom: 1px solid var(--line); }
+.sheet__bottles img { display: block; width: 80px; height: 100px; object-fit: cover; flex: none; }
+.grid--small { grid-template-columns: repeat(6, 1fr); gap: var(--u4) var(--u3); }
+.grid--small .tile__name { font-size: var(--t2); }
+@media (max-width: 1000px) {
+  .grid--small { grid-template-columns: repeat(4, 1fr); }
+}
+@media (max-width: 760px) {
+  .grid--small { grid-template-columns: repeat(2, 1fr); }
+  .card__thumbs img { width: 36px; height: 45px; }
+}
+
+/* Testata chiara: fondo crema come il resto della pagina, senza foto */
+.page-head--light { min-height: 0; padding-bottom: var(--u4); background: var(--cream); color: var(--text); }
+.page-head--light::before { content: none; }
+.page-head--light .page-head__copy { padding-top: var(--u5); }
+.page-head--light h1 .fact { color: var(--wine-deep); }
+.page-head--light .nav__link { color: var(--muted); text-shadow: none; }
+.page-head--light .nav__link[aria-current="page"],
+.page-head--light .nav__link:focus-visible { color: var(--text); }
+@media (hover: hover) and (pointer: fine) {
+  .page-head--light .nav__link:hover { color: var(--text); }
+}
+.page-head--light .nav__link:active,
+.page-head--light .nav__link.is-pressed { color: var(--wine-deep); }
+.page-head--light .nav__link:focus-visible { outline-color: var(--text); }
+.page-head--light + main .section { padding-top: var(--u4); }
+/* niente filo scuro tra testata e pagina: il fondo dietro è crema anche lui */
+html:has(.page-head--light), html:has(.page-head--light) body { background: var(--cream); }
+/* titolo lungo della pagina L'enoteca: 72 px (6 × 12), 36 su telefono */
+.page-head h1.page-head__long { max-width: 16em; margin: 0 auto; font-size: calc(var(--t1) * 6); line-height: 1.05; }
+@media (max-width: 760px) { .page-head h1.page-head__long { font-size: var(--t4); } }
+
+/* ---------- Galleria dei distillati (pagina L'enoteca) ---------- */
+.gallery {
+  position: relative;
+  margin-top: var(--u5);
+  padding-top: var(--u4);
+  border-top: 1px solid var(--line);
+  overflow: hidden;
+  isolation: isolate;
+}
+.gallery__head { margin-bottom: var(--u4); }
+/* le grandi parole dietro le foto */
+.gallery__words {
+  position: absolute;
+  inset: calc(var(--u5) * 1.5) 0 0;
+  z-index: -1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-around;
+  font: 400 calc(var(--t1) * 20)/.85 var(--serif);
+  color: #efe4d4;
+  letter-spacing: -.02em;
+  pointer-events: none;
+  user-select: none;
+}
+/* colonne con le linee verticali sottili, come una griglia */
+.gallery__wall {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: var(--u4);
+  padding-bottom: var(--u5);
+  background: repeating-linear-gradient(90deg, transparent 0, transparent calc(25% - 1px), var(--line) calc(25% - 1px), var(--line) 25%);
+}
+.gallery__col { display: flex; flex-direction: column; gap: var(--u5); }
+.gallery__col:nth-child(2) { padding-top: calc(var(--u5) * 2); }
+.gallery__col:nth-child(3) { padding-top: var(--u4); }
+.gallery__col:nth-child(4) { padding-top: calc(var(--u5) * 1.5); }
+.gallery__item { margin: 0; }
+.gallery__item--small { width: 75%; margin-left: auto; }
+.gallery__frame {
+  display: block;
+  padding: var(--u2);
+  background: #fff;
+  box-shadow: 0 18px 40px -24px rgba(var(--shade), .45);
+  transition: transform 450ms var(--ease-spring), box-shadow 280ms var(--ease-out);
+}
+.gallery__frame img { display: block; width: 100%; height: auto; aspect-ratio: 4 / 5; object-fit: cover; }
+.gallery__item figcaption { padding: var(--u2) var(--u1) 0; }
+@media (hover: hover) and (pointer: fine) {
+  .gallery__item:hover .gallery__frame { transform: rotate(-1.5deg) scale(1.03); box-shadow: 0 28px 50px -24px rgba(var(--shade), .55); }
+}
+@media (max-width: 760px) {
+  .gallery__words { font-size: calc(var(--t1) * 8); }
+  .gallery__wall {
+    grid-template-columns: repeat(2, 1fr);
+    gap: var(--u3);
+    background: repeating-linear-gradient(90deg, transparent 0, transparent calc(50% - 1px), var(--line) calc(50% - 1px), var(--line) 50%);
+  }
+  .gallery__col { gap: var(--u5); }
+  .gallery__col:nth-child(2) { padding-top: var(--u5); }
+  .gallery__frame { padding: var(--u1); }
+  .gallery__item .tile__name { font-size: var(--t2); }
+}
+
+/* ---------- Movimento: mappa che si disegna, cantine che rientrano, foto che si sviluppano ---------- */
+.atlas__map svg.map-pending path {
+  fill-opacity: 0;
+  stroke: var(--muted);
+  stroke-dasharray: var(--len);
+  stroke-dashoffset: var(--len);
+}
+.atlas__map svg.map-drawing path {
+  stroke-dasharray: var(--len);
+  transition:
+    stroke-dashoffset 1100ms cubic-bezier(.16, 1, .3, 1) var(--d),
+    fill-opacity 600ms linear calc(var(--d) + 500ms),
+    stroke 500ms linear calc(var(--d) + 700ms);
+}
+/* le regioni del vino si "riempiono" dal basso con una leggera pressione */
+.atlas__map svg.map-drawing path.has-wine { animation: wine-in 700ms cubic-bezier(.16, 1, .3, 1) calc(var(--d) + 400ms) both; }
+@keyframes wine-in {
+  from { transform: scale(.92); }
+  60% { transform: scale(1.05); }
+  to { transform: scale(1); }
+}
+
+.atlas__list li.is-entering { animation: card-in 380ms cubic-bezier(.16, 1, .3, 1) calc(var(--i) * 40ms) both; }
+@keyframes card-in {
+  from { opacity: 0; transform: translateY(12px); }
+}
+[data-titolo-regione], [data-conteggio] { transition: opacity 200ms linear; }
+
+.gallery__item { will-change: transform; }
+
+@media (prefers-reduced-motion: reduce) {
+  .atlas__list li.is-entering { animation: card-fade 200ms linear both; }
+  @keyframes card-fade { from { opacity: 0; } }
+}
+
+/* parole evidenziate nel titolo della pagina L'enoteca: il segno passa come un evidenziatore */
+.page-head h1 .mark {
+  display: inline;
+  padding: 0 .06em;
+  background-image: linear-gradient(rgba(122, 31, 44, .26), rgba(122, 31, 44, .26));
+  background-repeat: no-repeat;
+  background-position: 0 88%;
+  background-size: 100% .34em;
+  -webkit-box-decoration-break: clone;
+  box-decoration-break: clone;
+  animation: mark-in 700ms cubic-bezier(.16, 1, .3, 1) calc(400ms + var(--k) * 180ms) both;
+}
+@keyframes mark-in { from { background-size: 0% .34em; } }
+@media (prefers-reduced-motion: reduce) { .page-head h1 .mark { animation: none; } }

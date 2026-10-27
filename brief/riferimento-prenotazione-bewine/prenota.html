@@ -1,0 +1,224 @@
+<!doctype html>
+<html lang="it">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>Prenota e contatti · Be Wine, Montesilvano</title>
+  <meta name="description" content="Prenotazione di un tavolo da Be Wine, enoteca e vineria a Montesilvano, con orari, indirizzo, telefono e profili social.">
+  <meta name="robots" content="noindex, nofollow">
+  <meta name="theme-color" content="#F2E9E1">
+  <link rel="icon" href="data:,">
+  <script>(function(d){d.classList.add('js');addEventListener('load',function(){setTimeout(function(){if(!window.BWok)d.classList.remove('js')},1500)})})(document.documentElement)</script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,400;9..40,600&display=swap">
+  <link rel="stylesheet" href="css/style.css">
+  <script src="js/main.js" defer></script>
+</head>
+<body>
+  <a class="salta" href="#contenuto">Vai al contenuto</a>
+
+  <svg class="sprite" aria-hidden="true" focusable="false">
+    <symbol id="i-telefono" viewBox="0 0 24 24"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.13.96.36 1.9.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.91.34 1.85.57 2.81.7A2 2 0 0 1 22 16.92z"/></symbol>
+    <symbol id="i-indicazioni" viewBox="0 0 24 24"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"/><circle cx="12" cy="10" r="3"/></symbol>
+    <symbol id="i-uscita" viewBox="0 0 24 24"><path d="M7 17 17 7"/><path d="M7 7h10v10"/></symbol>
+    <symbol id="i-freccia" viewBox="0 0 24 24"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></symbol>
+    <symbol id="i-calendario" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4"/><path d="M8 2v4"/><path d="M3 10h18"/></symbol>
+    <symbol id="i-messaggio" viewBox="0 0 24 24"><path d="M7.9 20A9 9 0 1 0 4 16.1L2 22Z"/></symbol>
+    <symbol id="i-meno" viewBox="0 0 24 24"><path d="M5 12h14"/></symbol>
+    <symbol id="i-piu" viewBox="0 0 24 24"><path d="M5 12h14"/><path d="M12 5v14"/></symbol>
+    <symbol id="i-esterno" viewBox="0 0 24 24"><circle cx="12" cy="12" r="4"/><path d="M12 2v2"/><path d="M12 20v2"/><path d="m4.93 4.93 1.41 1.41"/><path d="m17.66 17.66 1.41 1.41"/><path d="M2 12h2"/><path d="M20 12h2"/><path d="m6.34 17.66-1.41 1.41"/><path d="m19.07 4.93-1.41 1.41"/></symbol>
+    <symbol id="i-accessibile" viewBox="0 0 24 24"><circle cx="16" cy="4" r="1"/><path d="m18 19 1-7-6 1"/><path d="m5 8 3-3 5.5 3-2.36 3.5"/><path d="M4.24 14.5a5 5 0 0 0 6.88 6"/><path d="M13.76 17.5a5 5 0 0 0-6.88-6"/></symbol>
+    <symbol id="i-zampa" viewBox="0 0 24 24"><circle cx="11" cy="4" r="2"/><circle cx="18" cy="8" r="2"/><circle cx="20" cy="16" r="2"/><path d="M9 10a5 5 0 0 1 5 5v3.5a3.5 3.5 0 0 1-6.84 1.045Q6.52 17.48 4.46 16.84A3.5 3.5 0 0 1 5.5 10Z"/></symbol>
+    <symbol id="i-lingue" viewBox="0 0 24 24"><path d="m5 8 6 6"/><path d="m4 14 6-6 2-3"/><path d="M2 5h12"/><path d="M7 2h1"/><path d="m22 22-5-10-5 10"/><path d="M14 18h6"/></symbol>
+    <symbol id="i-carta" viewBox="0 0 24 24"><rect x="2" y="5" width="20" height="14" rx="2"/><path d="M2 10h20"/></symbol>
+    <symbol id="i-cocktail" viewBox="0 0 24 24"><path d="M8 22h8"/><path d="M12 11v11"/><path d="m19 3-7 8-7-8Z"/></symbol>
+  </svg>
+
+  <header class="nav">
+    <div class="contenitore nav__in">
+      <nav class="nav__link" aria-label="Menu principale">
+        <a href="./">Home</a>
+        <a href="enoteca.html">L'enoteca</a>
+        <a href="prenota.html" aria-current="page">Prenota e contatti</a>
+      </nav>
+      <a class="nav__nome" href="./" aria-label="Be Wine, pagina iniziale">BE WINE</a>
+      <div class="nav__destra">
+        <a class="btn btn--primario btn--m" href="#prenota">
+          <span class="rullo"><span>Prenota un tavolo</span><span aria-hidden="true">Prenota un tavolo</span></span>
+        </a>
+      </div>
+      <button class="nav__menu" type="button" aria-expanded="false" aria-controls="menu-mobile">Menu</button>
+      <a class="nav__menu nav__menu--link" href="#pagine">Menu</a>
+    </div>
+    <nav class="menu-mobile" id="menu-mobile" aria-label="Menu principale" hidden>
+      <a href="./">Home</a>
+      <a href="enoteca.html">L'enoteca</a>
+      <a href="prenota.html" aria-current="page">Prenota e contatti</a>
+    </nav>
+  </header>
+
+  <main id="contenuto">
+
+    <section class="prenota" id="prenota" aria-labelledby="titolo-prenota">
+      <div class="contenitore prenota__griglia">
+        <div class="prenota__testo">
+          <h1 id="titolo-prenota" class="titolo-pagina">Prenota un tavolo</h1>
+          <p>La richiesta si invia da WhatsApp e il locale risponde per confermare la disponibilità.</p>
+          <div class="azioni prenota__senza-js">
+            <a class="btn btn--primario btn--l" href="tel:+393351618047">
+              <svg class="icona" aria-hidden="true"><use href="#i-telefono"/></svg>
+              Chiama
+            </a>
+            <a class="btn btn--fantasma btn--l" href="https://wa.me/393351618047" target="_blank" rel="noopener">
+              <svg class="icona" aria-hidden="true"><use href="#i-messaggio"/></svg>
+              WhatsApp<span class="nascosto"> (si apre in una nuova scheda)</span>
+            </a>
+          </div>
+        </div>
+
+        <form class="modulo" data-prenota novalidate autocomplete="off">
+          <div class="campo">
+            <span class="campo__eti" id="eti-persone">Persone</span>
+            <div class="contatore" role="group" aria-labelledby="eti-persone">
+              <button class="contatore__btn" type="button" data-meno aria-label="Una persona in meno"><svg class="icona" aria-hidden="true"><use href="#i-meno"/></svg></button>
+              <input class="contatore__val" id="p-persone" name="persone" type="number" inputmode="numeric" min="1" max="20" value="2" aria-labelledby="eti-persone">
+              <button class="contatore__btn" type="button" data-piu aria-label="Una persona in più"><svg class="icona" aria-hidden="true"><use href="#i-piu"/></svg></button>
+            </div>
+          </div>
+
+          <fieldset class="campo">
+            <legend class="campo__eti">Giorno</legend>
+            <div class="giorni" data-giorni></div>
+            <p class="campo__aiuto">Domenica e lunedì il locale è chiuso. Per date più lontane è possibile telefonare.</p>
+            <p class="campo__errore" data-errore="giorno" hidden>Selezionare un giorno.</p>
+          </fieldset>
+
+          <fieldset class="campo">
+            <legend class="campo__eti">Orario</legend>
+            <p class="campo__aiuto" data-ora-vuoto>Gli orari compaiono dopo aver scelto il giorno.</p>
+            <div class="giorni giorni--ore" data-ore hidden></div>
+            <p class="campo__errore" data-errore="ora" hidden>Selezionare un orario.</p>
+          </fieldset>
+
+          <div class="campo">
+            <label class="campo__eti" for="p-nome">Nome</label>
+            <input class="campo__input" id="p-nome" name="nome" type="text" autocomplete="name" maxlength="60" required>
+            <p class="campo__errore" data-errore="nome" hidden>Indicare il nome per la prenotazione.</p>
+          </div>
+
+          <div class="campo">
+            <label class="campo__eti" for="p-occasione">Un'occasione speciale? <span class="campo__facoltativo">facoltativo</span></label>
+            <input class="campo__input" id="p-occasione" name="occasione" type="text" maxlength="80" autocomplete="off" placeholder="Per esempio un compleanno">
+          </div>
+
+          <p class="modulo__riepilogo" data-riepilogo aria-live="polite"></p>
+          <button class="btn btn--primario btn--l modulo__invia" type="submit">
+            <svg class="icona" aria-hidden="true"><use href="#i-messaggio"/></svg>
+            Apri WhatsApp e invia
+          </button>
+          <p class="modulo__aiuto">Si apre WhatsApp con il messaggio già scritto: per completare la richiesta occorre premere Invia. Per gruppi numerosi, richieste particolari o senza WhatsApp è possibile telefonare al <a href="tel:+393351618047">335 161 8047</a>.</p>
+          <p class="modulo__nota" data-nota hidden>Si è aperto WhatsApp con il messaggio già scritto: per completare la richiesta basta premere Invia. La prenotazione è confermata dalla risposta del locale.</p>
+        </form>
+      </div>
+    </section>
+
+    <section class="orari" id="contatti" aria-labelledby="titolo-contatti">
+      <div class="contenitore orari__griglia">
+        <div class="orari__tabella">
+          <h2 id="titolo-contatti" class="orari__titolo reveal">Orari e contatti</h2>
+          <table class="tab-orari">
+            <caption class="nascosto">Orari di apertura settimanali</caption>
+            <tbody>
+              <tr data-giorno="1"><th scope="row">Lunedì</th><td>Chiuso</td></tr>
+              <tr data-giorno="2"><th scope="row">Martedì</th><td>17:00-24:00</td></tr>
+              <tr data-giorno="3"><th scope="row">Mercoledì</th><td>17:00-24:00</td></tr>
+              <tr data-giorno="4"><th scope="row">Giovedì</th><td>17:00-24:00</td></tr>
+              <tr data-giorno="5"><th scope="row">Venerdì</th><td>17:00-24:00</td></tr>
+              <tr data-giorno="6"><th scope="row">Sabato</th><td>18:00-24:00</td></tr>
+              <tr data-giorno="0"><th scope="row">Domenica</th><td>Chiuso</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="contatti">
+          <div class="contatti__blocco reveal">
+            <p class="eti">Indirizzo</p>
+            <p class="contatti__valore">Corso Umberto I, 421<br>65015 Montesilvano (PE)</p>
+            <p class="contatti__nota">A Montesilvano Marina, lungo la Statale 16 Adriatica.</p>
+          </div>
+          <div class="contatti__blocco reveal">
+            <p class="eti">Telefono e WhatsApp</p>
+            <p class="contatti__valore"><a href="tel:+393351618047">335 161 8047</a></p>
+          </div>
+          <div class="azioni reveal" data-azioni-contatti>
+            <a class="btn btn--fantasma btn--l" href="tel:+393351618047">
+              <svg class="icona" aria-hidden="true"><use href="#i-telefono"/></svg>
+              Chiama
+            </a>
+            <a class="btn btn--fantasma btn--l" href="https://wa.me/393351618047?text=Buongiorno%2C%20vorrei%20un%27informazione%3A%20" target="_blank" rel="noopener">
+              <svg class="icona" aria-hidden="true"><use href="#i-messaggio"/></svg>
+              Scrivi su WhatsApp<span class="nascosto"> (si apre in una nuova scheda)</span>
+            </a>
+            <a class="btn btn--fantasma btn--l" href="https://www.google.com/maps/dir/?api=1&amp;destination=Be%20Wine%2C%20Corso%20Umberto%20I%20421%2C%2065015%20Montesilvano%20PE" target="_blank" rel="noopener">
+              <svg class="icona" aria-hidden="true"><use href="#i-indicazioni"/></svg>
+              Indicazioni<span class="nascosto"> (si apre in una nuova scheda)</span>
+            </a>
+          </div>
+          <div class="contatti__blocco reveal">
+            <p class="eti">Profilo social</p>
+            <ul class="social" role="list">
+              <li><a href="https://www.facebook.com/bewinepescara" target="_blank" rel="noopener">Facebook<span class="nascosto"> (si apre in una nuova scheda)</span><svg class="icona" aria-hidden="true"><use href="#i-uscita"/></svg></a></li>
+            </ul>
+          </div>
+        </div>
+        <div class="orari__servizi reveal">
+          <p class="eti">Da sapere</p>
+          <ul class="servizi" role="list">
+            <li><svg class="icona" aria-hidden="true"><use href="#i-esterno"/></svg>Tavoli all'aperto, sul corso</li>
+            <li><svg class="icona" aria-hidden="true"><use href="#i-accessibile"/></svg>Ingresso e bagno accessibili</li>
+            <li><svg class="icona" aria-hidden="true"><use href="#i-zampa"/></svg>Animali ammessi</li>
+            <li><svg class="icona" aria-hidden="true"><use href="#i-lingue"/></svg>Si parla inglese</li>
+            <li><svg class="icona" aria-hidden="true"><use href="#i-carta"/></svg>Carte di credito e Bancomat</li>
+            <li><svg class="icona" aria-hidden="true"><use href="#i-cocktail"/></svg>Anche cocktail</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="piede">
+    <div class="contenitore">
+      <div class="piede__griglia">
+        <div class="piede__marchio">
+          <a class="piede__nome" href="./">BE WINE</a>
+          <p>Enoteca e vineria a Montesilvano, dal 2015.</p>
+          <p lang="en">English spoken · Open Tuesday to Saturday, evenings</p>
+        </div>
+        <div class="piede__blocco">
+          <p class="eti">Orari</p>
+          <p>Martedì-venerdì 17:00-24:00<br>Sabato 18:00-24:00<br>Domenica e lunedì chiuso</p>
+        </div>
+        <div class="piede__blocco">
+          <p class="eti">Indirizzo</p>
+          <p>Corso Umberto I, 421<br>65015 Montesilvano (PE)</p>
+          <a class="piede__link" href="https://www.google.com/maps/dir/?api=1&amp;destination=Be%20Wine%2C%20Corso%20Umberto%20I%20421%2C%2065015%20Montesilvano%20PE" target="_blank" rel="noopener">Indicazioni<span class="nascosto"> (si apre in una nuova scheda)</span></a>
+        </div>
+        <div class="piede__blocco">
+          <p class="eti">Contatti</p>
+          <p><a class="piede__link" href="tel:+393351618047">335 161 8047</a></p>
+          <a class="piede__link" href="https://wa.me/393351618047?text=Buongiorno%2C%20vorrei%20un%27informazione%3A%20" target="_blank" rel="noopener">Scrivi su WhatsApp<span class="nascosto"> (si apre in una nuova scheda)</span></a><br>
+          <a class="piede__link" href="https://www.facebook.com/bewinepescara" target="_blank" rel="noopener">Be Wine su Facebook<span class="nascosto"> (si apre in una nuova scheda)</span></a>
+        </div>
+      </div>
+      <div class="piede__fondo">
+        <nav class="piede__pagine" id="pagine" aria-label="Pagine del sito">
+          <a href="./">Home</a>
+          <a href="enoteca.html">L'enoteca</a>
+          <a href="prenota.html" aria-current="page">Prenota e contatti</a>
+        </nav>
+        <p class="piede__crediti">Foto: servizio pubblicato su italia.it (2024) e scheda Google di Be Wine</p>
+      </div>
+    </div>
+  </footer>
+</body>
+</html>

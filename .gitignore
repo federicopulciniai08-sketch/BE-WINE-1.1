@@ -1,0 +1,9 @@
+# Foto originali del fotografo e del locale (circa 280 MB, diritti da concordare col titolare).
+# Nel sito ci sono già le versioni ridotte, in hero-demo/img.
+foto be wine/
+
+# Prove scartate durante la progettazione: restano solo in locale
+hero-demo/archivio/
+
+# Impostazioni locali di Claude Code
+.claude/
