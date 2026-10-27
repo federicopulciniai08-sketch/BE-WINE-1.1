@@ -907,3 +907,46 @@ html:has(.page-head--light), html:has(.page-head--light) body { background: var(
   .hero .nav__link:active, .hero .nav__link.is-pressed { color: var(--wine-deep); }
   .hero .nav__link:focus-visible { outline-color: var(--text); }
 }
+
+/* ---------- Social nella hero: Instagram e Facebook dopo il menu ---------- */
+.bar__end { display: flex; align-items: center; gap: var(--u4); }
+.social {
+  display: flex;
+  align-items: center;
+  gap: var(--u1);
+  padding-left: var(--u3);
+  border-left: 1px solid rgba(251, 246, 238, .3);
+  list-style: none;
+}
+.social__link {
+  display: grid;
+  place-items: center;
+  width: var(--u4);
+  height: var(--u4);
+  color: rgba(251, 246, 238, .82);
+  transition: color 200ms linear, transform 450ms var(--ease-spring);
+}
+.social__link svg { width: 20px; height: 20px; fill: none; stroke: currentColor; stroke-width: 1.6; stroke-linejoin: round; }
+.social__link svg path { fill: currentColor; stroke: none; }
+.social__link .social__dot { fill: currentColor; stroke: none; }
+@media (hover: hover) and (pointer: fine) {
+  .social__link:hover { color: var(--ink); transform: translateY(-2px); }
+}
+.social__link:active { color: var(--wine-soft); transform: scale(1.08); transition-duration: 80ms, 140ms; }
+.social__link:focus-visible { outline: 2px solid var(--ink); outline-offset: 2px; border-radius: 2px; }
+
+@media (max-width: 760px) {
+  /* sul telefono la barra crema è piena: i social stanno sulla foto, appena sotto, a destra */
+  .hero .bar__end { gap: 0; }
+  .hero .social { position: absolute; top: calc(68px + var(--u1)); right: var(--u2); padding-left: 0; border-left: 0; }
+  .hero .social__link { color: var(--ink); filter: drop-shadow(0 1px 6px rgba(var(--shade), .5)); }
+
+  /* piede più compatto sul telefono */
+  .footer { padding: var(--u4) var(--u3) var(--u3); line-height: 1.7; }
+  .footer__grid { grid-template-columns: 1fr 1fr; gap: var(--u3) var(--u3); }
+  .footer__brand { grid-column: 1 / -1; }
+  .footer__brand img { height: 32px; margin-bottom: var(--u2); }
+  .footer__label { margin-bottom: var(--u1); }
+  .footer p + p { margin-top: var(--u1); }
+  .footer__legal { margin-top: var(--u4); padding-top: var(--u2); flex-direction: column; gap: var(--u1); }
+}
