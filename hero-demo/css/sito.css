@@ -881,3 +881,29 @@ html:has(.page-head--light), html:has(.page-head--light) body { background: var(
 }
 @keyframes mark-in { from { background-size: 0% .34em; } }
 @media (prefers-reduced-motion: reduce) { .page-head h1 .mark { animation: none; } }
+
+/* Logo chiaro sulla foto, scuro sulla barra crema del telefono */
+.brand__dark { display: none !important; }
+
+@media (max-width: 760px) {
+  /* Home su telefono: logo e menu su una barra crema in alto, staccata dalla foto */
+  .hero { padding-top: 0; }
+  .hero .bar {
+    flex-wrap: nowrap;
+    align-items: center;
+    margin: 0 calc(-1 * var(--u3));
+    padding: var(--u2) var(--u3);
+    background: var(--cream);
+    box-shadow: 0 1px 0 var(--line);
+  }
+  .hero .brand img { height: 30px; }
+  .hero .brand__light { display: none !important; }
+  .hero .brand__dark { display: block !important; }
+  .hero .nav { width: auto; justify-content: flex-end; gap: var(--u3); }
+  /* il logo porta già alla home: sulla barra restano L'enoteca e Prenota, che stanno anche sui telefoni piccoli */
+  .hero .nav li:first-child { display: none; }
+  .hero .nav__link { min-height: 44px; color: var(--muted); text-shadow: none; letter-spacing: .1em; }
+  .hero .nav__link[aria-current="page"] { color: var(--text); }
+  .hero .nav__link:active, .hero .nav__link.is-pressed { color: var(--wine-deep); }
+  .hero .nav__link:focus-visible { outline-color: var(--text); }
+}
