@@ -950,3 +950,15 @@ html:has(.page-head--light), html:has(.page-head--light) body { background: var(
   .footer p + p { margin-top: var(--u1); }
   .footer__legal { margin-top: var(--u4); padding-top: var(--u2); flex-direction: column; gap: var(--u1); }
 }
+
+@media (min-width: 761px) {
+  /* Home su computer: menu al centro della barra, social prima della linea e poi le voci */
+  .hero .bar { display: grid; grid-template-columns: 1fr auto 1fr; }
+  .hero .bar__end { grid-column: 2; }
+  .hero .social {
+    order: -1;
+    padding: 0 var(--u3) 0 0;
+    border-left: 0;
+    border-right: 1px solid rgba(251, 246, 238, .3);
+  }
+}
