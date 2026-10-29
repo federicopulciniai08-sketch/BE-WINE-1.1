@@ -1001,3 +1001,6 @@ html:has(.page-head--light), html:has(.page-head--light) body { background: var(
 /* niente riga sotto la barra della home */
 .hero .bar { box-shadow: none !important; }
 @media (max-width: 760px) { .hero .bar .social__link { color: var(--ink); } }
+
+/* Recensioni su telefono: "158 recensioni." va a capo tutta insieme, senza spezzarsi */
+@media (max-width: 760px) { .reviews .title .fact { display: block; white-space: nowrap; } }
