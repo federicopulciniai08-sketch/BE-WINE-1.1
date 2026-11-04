@@ -217,21 +217,17 @@
 .about.anim.is-in .title .fact { background-size: 100% 1.5px; }
 
 /* ================= Telefono come il riferimento (Agence Van den Abeele) =================
-   Ordine di ogni sezione: titolo centrato grande · foto piccola inclinata col cartoncino ·
-   sottotitolo serif a sinistra · testo · bottone a capsula largo. Piede a una colonna. */
+   Hero col titolo a metà schermo, recensioni con titolo centrato e bottone a capsula,
+   piede a una colonna. Chi siamo resta com'era: foto piena, etichetta, titolo, testo. */
 @media (max-width: 760px) {
-  .grande { --t2: 17px; }
-
   /* hero: titolo a metà schermo, il cerchio sotto, spostato a destra */
   .grande .copy { margin: auto 0; }
   .grande .scroll { align-self: flex-end; width: 96px; height: 96px; margin: var(--u4) 12% 0 0; }
   .grande .scroll__text { font-size: 10px; margin-top: -14px; }
 
-  /* sezioni: più aria tra una e l'altra */
-  .grande .section { padding: calc(var(--u5) * 1.25) var(--u3); }
-
-  /* l'etichetta diventa il titolo centrato della sezione */
-  .grande .label {
+  /* recensioni: più aria, l'etichetta diventa il titolo centrato della sezione */
+  .grande .reviews { display: flex; flex-direction: column; padding: calc(var(--u5) * 1.25) var(--u3); }
+  .grande .reviews .label {
     margin-bottom: var(--u4);
     font-family: var(--display);
     font-weight: 360;
@@ -244,11 +240,12 @@
     color: var(--text);
   }
   /* il titolo diventa il sottotitolo serif, più piccolo */
-  .grande .title { font-size: 28px; line-height: 1.15; letter-spacing: -.01em; }
-  .grande .lead { margin: var(--u3) 0 var(--u4); font-size: 16px; line-height: 1.55; }
-
-  /* bottoni a capsula larghi, testo normale */
-  .grande .btn {
+  .grande .reviews .title { font-size: 28px; line-height: 1.15; letter-spacing: -.01em; }
+  .grande .reviews__list { margin: var(--u4) 0; gap: var(--u4); }
+  .grande .review__quote { font-size: 21px; }
+  /* bottone a capsula largo, testo normale, al centro */
+  .grande .reviews > .btn {
+    align-self: center;
     min-height: 60px;
     padding: 0 40px;
     font-size: 15px;
@@ -256,47 +253,6 @@
     letter-spacing: 0;
     text-transform: none;
   }
-
-  /* Chi siamo: titolo, foto, sottotitolo, testo, bottone */
-  .grande .about { display: flex; flex-direction: column; gap: 0; }
-  .grande .about__text { display: contents; }
-  .grande .about .label { order: 0; }
-  .grande .about__photo {
-    order: 1;
-    position: relative;
-    width: 66%;
-    margin: 0 auto calc(var(--u4) + var(--u2));
-    rotate: -2deg;
-  }
-  .grande .about__photo::before {
-    content: "";
-    position: absolute;
-    inset: 0;
-    background-color: #ebe3d6;
-    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 .4 0 0 0 0 .32 0 0 0 0 .25 0 0 0 .16 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
-    translate: -14px -16px;
-    rotate: 5deg;
-  }
-  .grande .about__photo img { position: relative; aspect-ratio: 4 / 3; object-position: 50% 40%; }
-  .grande .about .title { order: 2; }
-  .grande .about .lead { order: 3; }
-  .grande .about .btn { order: 4; align-self: flex-start; }
-
-  /* su telefono la foto si scopre senza tagliare il cartoncino e senza movimento allo scorrere */
-  .grande .about.anim .about__photo { overflow: visible; clip-path: none; transition: none; }
-  .grande .about.anim .about__photo img {
-    scale: 1;
-    translate: none;
-    clip-path: inset(100% 0 0 0);
-    transition: clip-path 1300ms cubic-bezier(.77, 0, .18, 1) 200ms;
-  }
-  .grande .about.anim.is-in .about__photo img { scale: 1; clip-path: inset(0 0 0 0); }
-
-  /* Recensioni: stesso ordine, bottone centrato */
-  .grande .reviews { display: flex; flex-direction: column; }
-  .grande .reviews__list { margin: var(--u4) 0; gap: var(--u4); }
-  .grande .review__quote { font-size: 21px; }
-  .grande .reviews > .btn { align-self: center; }
 
   /* Piede: una colonna, titoletti in grassetto, voci una sotto l'altra */
   .grande .footer { padding: calc(var(--u5) * 1.25) var(--u3) var(--u4); font-size: 15px; line-height: 2.2; letter-spacing: 0; }
@@ -315,3 +271,6 @@
   .grande .footer__link { text-decoration: none; }
   .grande .footer__legal { font-size: 13px; line-height: 1.8; }
 }
+
+/* Chi siamo riceve il fuoco dopo lo scorrimento del cerchio: niente riquadro attorno alla sezione */
+.grande .about:focus { outline: none; }
