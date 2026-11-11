@@ -10,9 +10,9 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@500;700&family=Fraunces:opsz,wght@9..144,300..500&family=Instrument+Serif&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="css/sito.css?v=44">
+<link rel="stylesheet" href="css/sito.css?v=58">
 <!-- Prova: più vicina al riferimento (Agence Van den Abeele), scritte più grandi e larghe -->
-<link rel="stylesheet" href="css/grande.css?v=10">
+<link rel="stylesheet" href="css/grande.css?v=12">
 </head>
 <body class="grande">
   <header class="hero">
@@ -23,21 +23,15 @@
         <ul class="nav">
           <li><a class="nav__link" href="index.html" aria-current="page">Home</a></li>
           <li><a class="nav__link" href="enoteca.html">L'enoteca</a></li>
-          <li><a class="nav__link" href="https://wa.me/393351618047?text=Buonasera%2C%20vorrei%20prenotare%20un%20tavolo%20da%20Be%20Wine%20per%20" target="_blank" rel="noopener">Prenota</a></li>
-        </ul>
-        <ul class="social" aria-label="Be Wine sui social">
-          <li><a class="social__link" href="https://www.instagram.com/bewinemontesilvano/" target="_blank" rel="noopener" aria-label="Instagram">
-            <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1" class="social__dot"/></svg>
-          </a></li>
-          <li><a class="social__link" href="https://www.facebook.com/BeWinePescara/" target="_blank" rel="noopener" aria-label="Facebook">
-            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M14 8.5V7c0-.8.5-1.2 1.2-1.2H17V2.5h-2.6C11.6 2.5 10.5 4.3 10.5 6.8v1.7H8v3.3h2.5V21.5H14v-9.7h2.6l.4-3.3z"/></svg>
-          </a></li>
+          <li><a class="nav__link" href="birre-distillati.html">Birre e distillati</a></li>
+          <li><a class="nav__link nav__link--cta" href="https://wa.me/393351618047?text=Buonasera%2C%20vorrei%20prenotare%20un%20tavolo%20da%20Be%20Wine%20per%20" target="_blank" rel="noopener">Prenota</a></li>
         </ul>
       </div>
     </div>
     <div class="copy">
       <p class="rating"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2.5l2.9 6.1 6.6.8-4.9 4.6 1.3 6.6L12 17.3l-5.9 3.3 1.3-6.6-4.9-4.6 6.6-.8z"/></svg>4,7 stelle su Google</p>
       <h1><span>Vini da</span><span>tutta Italia.</span><span class="fact">Dal 2015.</span></h1>
+      <a class="btn btn--solid hero__cta" href="https://wa.me/393351618047?text=Buonasera%2C%20vorrei%20prenotare%20un%20tavolo%20da%20Be%20Wine%20per%20" target="_blank" rel="noopener">Prenota un tavolo</a>
       <a class="scroll" href="#chi-siamo">
         <svg class="scroll__ring" viewBox="0 0 148 148" aria-hidden="true"><path d="M60 146.4A73 73 0 1 1 88 146.4"/><path d="M74 104v40M66 136l8 8 8-8"/></svg>
         <span class="scroll__text">Scopri chi siamo</span>
@@ -48,13 +42,16 @@
   <main>
     <section class="section about" id="chi-siamo" aria-labelledby="about-title">
       <figure class="about__photo">
-        <img src="img/chi-siamo.jpg" alt="Una mano regge una bottiglia di gin davanti agli scaffali di vini del locale" width="830" height="1030" loading="lazy">
+        <img src="img/chi-siamo-locale.jpg?v=2" alt="Una botte di legno in primo piano e, dietro, i tavoli della sala sotto gli archi rossi" width="830" height="1030" loading="lazy">
       </figure>
       <div class="about__text">
         <p class="label">Chi siamo</p>
-        <h2 class="title" id="about-title">Enoteca e vineria, <span class="fact">dal 2015.</span></h2>
+        <h2 class="title" id="about-title">Be Wine <span class="fact">dal 2015.</span></h2>
         <p class="lead">Be Wine apre nel 2015 sul corso di Montesilvano Marina. È un'enoteca dove scegliere una bottiglia da portare a casa e una vineria dove berla con calma, al banco o ai tavoli all'aperto. Sugli scaffali ci sono vini, birre e distillati scelti da tutta Italia: rossi, bianchi e bollicine, ma anche rum, whisky, gin e grappe, e c'è il vino alla spina. Al banco trovate Fabio: se non sapete cosa prendere, vi chiede cosa vi piace e vi consiglia. Si entra per un calice, spesso si resta per la serata.</p>
-        <a class="btn btn--dark" href="enoteca.html">Scopri i vini</a>
+        <div class="cta-row">
+          <a class="btn btn--pieno" href="https://wa.me/393351618047?text=Buonasera%2C%20vorrei%20prenotare%20un%20tavolo%20da%20Be%20Wine%20per%20" target="_blank" rel="noopener">Prenota un tavolo</a>
+          <a class="btn btn--dark" href="enoteca.html">Scopri i vini</a>
+        </div>
       </div>
     </section>
 
@@ -80,9 +77,24 @@
           <p class="review__author">La Bambi · Local Guide</p>
         </li>
       </ul>
-      <a class="btn btn--dark" href="https://www.google.com/maps/search/?api=1&amp;query=Be%20Wine%20Montesilvano" target="_blank" rel="noopener">Leggi tutte su Google</a>
+      <div class="cta-row reviews__cta">
+        <a class="btn btn--pieno" href="https://wa.me/393351618047?text=Buonasera%2C%20vorrei%20prenotare%20un%20tavolo%20da%20Be%20Wine%20per%20" target="_blank" rel="noopener">Prenota un tavolo</a>
+        <a class="text-link" href="https://www.google.com/maps/search/?api=1&amp;query=Be%20Wine%20Montesilvano" target="_blank" rel="noopener">Leggi tutte su Google</a>
+      </div>
     </section>
   </main>
+
+  <!-- Barra rapida: compare quando la testata esce dallo schermo (js/sito.js). In alto su computer, in basso su telefono. -->
+  <div class="dock" data-dock>
+    <a class="dock__brand" href="index.html"><img src="img/logo-scuro.png" alt="Be Wine" width="776" height="254"></a>
+    <div class="dock__actions">
+      <a class="dock__link" href="index.html">Home</a>
+      <a class="dock__link" href="enoteca.html">L'enoteca</a>
+      <a class="dock__link" href="birre-distillati.html">Birre e distillati</a>
+      <a class="dock__call" href="tel:+393351618047"><span class="dock__call-long">335 161 8047</span><span class="dock__call-short">Chiama</span></a>
+      <a class="btn btn--pieno dock__cta" href="https://wa.me/393351618047?text=Buonasera%2C%20vorrei%20prenotare%20un%20tavolo%20da%20Be%20Wine%20per%20" target="_blank" rel="noopener">Prenota un tavolo</a>
+    </div>
+  </div>
 
   <footer class="footer">
     <div class="footer__grid">
@@ -93,7 +105,7 @@
       <div>
         <p class="footer__label">Dove siamo</p>
         <p>Corso Umberto I, 423<br>65015 Montesilvano (PE)</p>
-        <a class="footer__link" href="https://www.google.com/maps/search/?api=1&amp;query=Be%20Wine%20Corso%20Umberto%20I%20423%20Montesilvano" target="_blank" rel="noopener">Indicazioni</a>
+        <a class="footer__link footer__link--big" href="https://www.google.com/maps/dir/?api=1&amp;destination=Be%20Wine%2C%20Corso%20Umberto%20I%20423%2C%20Montesilvano" target="_blank" rel="noopener">Indicazioni</a>
       </div>
       <div>
         <p class="footer__label">Orari</p>
@@ -101,7 +113,8 @@
       </div>
       <div>
         <p class="footer__label">Contatti</p>
-        <p><a class="footer__link" href="tel:+393351618047">335 161 8047</a><br><a class="footer__link" href="https://wa.me/393351618047" target="_blank" rel="noopener">WhatsApp</a></p>
+        <a class="btn btn--solid footer__cta" href="https://wa.me/393351618047?text=Buonasera%2C%20vorrei%20prenotare%20un%20tavolo%20da%20Be%20Wine%20per%20" target="_blank" rel="noopener">Prenota un tavolo</a>
+        <p><a class="footer__link footer__link--big" href="tel:+393351618047">Chiama 335 161 8047</a></p>
         <p><a class="footer__link" href="https://www.facebook.com/BeWinePescara/" target="_blank" rel="noopener">Facebook</a> · <a class="footer__link" href="https://www.instagram.com/bewinemontesilvano/" target="_blank" rel="noopener">Instagram</a></p>
       </div>
     </div>
@@ -114,7 +127,8 @@
     </div>
   </footer>
 
-<script src="js/sito.js?v=28"></script>
+<script src="js/sito.js?v=29"></script>
 <script src="js/grande.js?v=4"></script>
+<script src="js/prenota.js?v=3"></script>
 </body>
 </html>

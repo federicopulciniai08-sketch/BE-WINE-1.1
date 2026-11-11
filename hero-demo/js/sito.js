@@ -14,3 +14,31 @@ document.querySelectorAll(".nav__link").forEach(function (link) {
   link.addEventListener("pointercancel", release);
   link.addEventListener("pointerleave", release);
 });
+
+// Barra rapida con Prenota: compare quando il menu e il tasto Prenota della prima schermata
+// sono usciti dallo schermo. Su telefono si nasconde quando si arriva al piede, dove i contatti ci sono già.
+(function () {
+  var dock = document.querySelector("[data-dock]");
+  var foot = document.querySelector(".footer");
+  if (!dock || !("IntersectionObserver" in window)) return;
+  var guardati = Array.prototype.slice.call(document.querySelectorAll(".bar, .hero__cta"));
+  var telefono = window.matchMedia("(max-width: 760px)");
+  var inVista = new Set();
+  var piede = false;
+  function aggiorna() {
+    var mostra = inVista.size === 0 && !(telefono.matches && piede);
+    dock.classList.toggle("is-visible", mostra);
+    dock.toggleAttribute("inert", !mostra);
+  }
+  var io = new IntersectionObserver(function (voci) {
+    voci.forEach(function (v) {
+      if (v.target === foot) piede = v.isIntersecting;
+      else if (v.isIntersecting) inVista.add(v.target);
+      else inVista.delete(v.target);
+    });
+    aggiorna();
+  });
+  guardati.forEach(function (el) { io.observe(el); });
+  if (foot) io.observe(foot);
+  if (telefono.addEventListener) telefono.addEventListener("change", aggiorna);
+})();

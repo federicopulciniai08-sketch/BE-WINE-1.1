@@ -560,52 +560,186 @@ main { background: var(--cream); color: var(--text); }
   align-items: start;
 }
 .atlas__map { position: sticky; top: var(--u4); }
-.atlas__map svg { display: block; width: 100%; height: auto; max-height: calc(100vh - var(--u5)); }
-.atlas__map path {
-  fill: #ece3d4;
-  stroke: var(--cream);
-  stroke-width: 1.5;
-  transition: fill 200ms linear, opacity 200ms linear;
+
+/* ---------- Mappe delle regioni (regole della mappa "Syndicus" di Agence Van den Abeele) ----------
+   comuni chiarissimi con confini sottili, province più marcate; i comuni delle cantine un tono più scuri;
+   un segnaposto vino come quelli di Google Maps; al passaggio il comune si scurisce,
+   compare il nome sotto il segnaposto e gli altri spariscono.
+   Intorno alla mappa, le frecce verso le altre regioni trattate. */
+.atlas--abruzzo { grid-template-columns: 7fr 5fr; }
+.atlas--abruzzo .atlas__map { max-width: 576px; }
+/* il palco lascia 48 px intorno alla mappa per le frecce: la mappa resta al massimo 480 px */
+.abr-stage { position: relative; padding: calc(var(--u4) + var(--u2)); }
+.abr-vista { position: relative; aspect-ratio: 1; }
+.abr { position: absolute; inset: 0; margin: auto; }
+.abr svg { display: block; width: 100%; height: auto; overflow: visible; }
+.abr.is-leaving { pointer-events: none; }
+.abr__comuni path {
+  fill: #fff;
+  stroke: #ece4d8;
+  stroke-width: 1;
+  stroke-linejoin: round;
+  vector-effect: non-scaling-stroke;
+  transition: fill 200ms ease-out;
 }
-.atlas__map path.has-wine { fill: var(--wine-deep); cursor: pointer; }
-.atlas__map path.has-wine {
-  transform-box: fill-box;
-  transform-origin: center;
-  transition: fill 200ms linear, opacity 200ms linear, transform 450ms var(--ease-spring), filter 280ms var(--ease-out);
+.abr__comuni path.has-wine { fill: #ebdfcc; cursor: pointer; }
+.abr__comuni path.has-wine.is-hot { fill: #dccab0; }
+@media (hover: hover) and (pointer: fine) {
+  .abr__comuni path.has-wine:not(.is-dim):hover { fill: #dccab0; }
+}
+.abr__comuni path.has-wine.is-dim { fill: #fff; cursor: default; }
+.abr__prov, .abr__reg {
+  fill: none;
+  stroke-linejoin: round;
+  stroke-linecap: round;
+  vector-effect: non-scaling-stroke;
+  pointer-events: none;
+}
+.abr__prov { stroke: #c9b8a1; stroke-width: 1; }
+.abr__reg { stroke: #b8a68e; stroke-width: 1.25; }
+
+/* Segnaposto: la punta della goccia sta sul centro del comune */
+.abr__pins { position: absolute; inset: 0; pointer-events: none; }
+.abr__pin {
+  position: absolute;
+  width: 24px;
+  height: 34px;
+  padding: 0;
+  border: 0;
+  background: none;
+  transform: translate(-50%, -100%);
+  pointer-events: auto;
+  cursor: pointer;
+  transition: opacity 200ms ease-in-out;
+}
+.abr__drop {
+  display: block;
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+  transform-origin: 50% 100%;
+  filter: drop-shadow(0 2px 2px rgba(var(--shade), .3));
+  transition: transform 300ms var(--ease-spring);
+}
+.abr__drop path { fill: var(--wine-deep); stroke: #5c1621; stroke-width: 1; }
+.abr__drop circle { fill: var(--cream); }
+.abr__label {
+  position: absolute;
+  top: calc(100% + var(--u1));
+  left: 50%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--u1);
+  white-space: nowrap;
+  transform: translateX(-50%);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 200ms ease-in-out;
+  /* alone crema: il nome si legge anche sopra i confini */
+  text-shadow: 0 0 6px var(--cream), 0 0 2px var(--cream), 0 0 12px var(--cream);
+}
+.abr__name { font: 400 var(--t2)/1 var(--serif); color: var(--text); }
+.abr__place { font: 700 var(--t1)/1 var(--sans); letter-spacing: .13em; text-transform: uppercase; color: var(--muted); }
+.abr.is-hovering .abr__pin:not(.is-hot) { opacity: 0; }
+.abr__pin.is-hot { z-index: 2; }
+.abr__pin.is-hot .abr__label { opacity: 1; }
+.abr__pin.is-hot .abr__drop { transform: translateY(-3px) scale(1.12); }
+.abr__pin.is-off { opacity: 0; pointer-events: none; }
+.abr__pin:focus-visible { outline: none; }
+.abr__pin:focus-visible .abr__drop path { stroke: var(--text); stroke-width: 2; }
+.atlas__reset { display: block; margin: calc(-1 * var(--u2)) 0 var(--u3); padding: 0; border: 0; background: none; cursor: pointer; }
+.atlas__reset[hidden] { display: none; }
+.atlas__empty { margin: var(--u3) 0 0; }
+
+/* Frecce verso le altre regioni: cerchio con la freccia girata nella direzione vera, nome accanto */
+.abr-arrow {
+  position: absolute;
+  z-index: 3;
+  display: flex;
+  align-items: center;
+  gap: var(--u2);
+  padding: 0;
+  border: 0;
+  background: none;
+  color: var(--wine-deep);
+  font: 700 var(--t1)/1.3 var(--sans);
+  letter-spacing: .13em;
+  text-transform: uppercase;
+  text-align: left;
+  white-space: nowrap;
+  cursor: pointer;
+  animation: arrow-in 300ms var(--ease-out) both;
+  transition: opacity 200ms linear;
+}
+.abr-arrow[data-lato="left"],
+.abr-arrow[data-lato="right"] { flex-direction: column; align-items: flex-start; gap: var(--u1); }
+.abr-arrow[data-lato="right"] { align-items: flex-end; }
+.abr-arrow__icon {
+  display: flex;
+  flex: none;
+  align-items: center;
+  justify-content: center;
+  width: 48px;
+  height: 48px;
+  border: 1px solid var(--wine-deep);
+  border-radius: 50%;
+  background: var(--wine-deep);
+  color: var(--cream);
+  box-shadow: 0 6px 14px -6px rgba(var(--shade), .45);
+  transition: background 200ms linear, color 200ms linear, transform 450ms var(--ease-spring);
+}
+.abr-arrow__icon svg {
+  width: 24px;
+  height: 24px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.75;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  transform: rotate(var(--a));
+  transition: transform 280ms var(--ease-out), opacity 200ms linear;
 }
 @media (hover: hover) and (pointer: fine) {
-  /* la regione si alza un poco verso chi la guarda */
-  .atlas__map path.has-wine:hover {
-    fill: #9b2c3c;
-    opacity: 1;
-    transform: translateY(-4px) scale(1.04);
-    filter: drop-shadow(0 8px 10px rgba(var(--shade), .28));
-  }
+  .abr-arrow:hover .abr-arrow__icon { background: #9b2c3c; border-color: #9b2c3c; }
+  /* la freccia si sporge un poco verso la regione */
+  .abr-arrow:hover .abr-arrow__icon svg { transform: rotate(var(--a)) translateX(3px); }
 }
-.atlas__tip {
-  position: absolute;
-  left: 0;
-  top: 0;
-  z-index: 2;
-  padding: var(--u2) var(--u3);
-  background: var(--text);
-  color: var(--ink);
-  font-size: var(--t1);
-  font-weight: 700;
-  letter-spacing: .08em;
-  text-transform: uppercase;
-  white-space: nowrap;
-  pointer-events: none;
-  opacity: 0;
-  transform: translate(-50%, calc(-100% - 8px)) scale(.96);
-  transition: opacity 160ms linear, transform 220ms var(--ease-out);
+.abr-arrow:active .abr-arrow__icon { transform: scale(.92); transition-duration: 200ms, 200ms, 120ms; }
+.abr-arrow:focus-visible { outline: none; }
+.abr-arrow:focus-visible .abr-arrow__icon { outline: 2px solid var(--text); outline-offset: 3px; }
+/* al clic la freccia parte verso la regione, poi tutte le frecce lasciano posto a quelle nuove */
+.abr-arrow.is-going .abr-arrow__icon { background: #9b2c3c; border-color: #9b2c3c; }
+.abr-arrow.is-going .abr-arrow__icon svg { transform: rotate(var(--a)) translateX(14px); opacity: 0; transition-duration: 260ms, 220ms; }
+.abr-arrow.is-leaving { opacity: 0; pointer-events: none; }
+@keyframes arrow-in { from { opacity: 0; transform: scale(.9); } }
+
+/* Entrata di una mappa: il confine si disegna, i comuni compaiono, poi i segnaposti cadono uno alla volta */
+.abr--pending .abr__comuni,
+.abr--pending .abr__prov { opacity: 0; }
+.abr--pending .abr__reg { stroke-dasharray: var(--len); stroke-dashoffset: var(--len); }
+.abr--pending .abr__drop { transform: translateY(-28px); opacity: 0; }
+.abr--in .abr__reg { stroke-dasharray: var(--len); transition: stroke-dashoffset 800ms cubic-bezier(.16, 1, .3, 1); }
+.abr--in .abr__comuni,
+.abr--in .abr__prov { transition: opacity 400ms linear 150ms; }
+.abr--in .abr__drop {
+  transition:
+    transform 450ms var(--ease-spring) calc(450ms + var(--i) * 70ms),
+    opacity 120ms linear calc(450ms + var(--i) * 70ms);
 }
-.atlas__tip.is-on { opacity: 1; transform: translate(-50%, calc(-100% - 16px)) scale(1); }
 @media (prefers-reduced-motion: reduce) {
-  .atlas__map path.has-wine:hover { transform: none; }
+  .abr-arrow { animation: none; }
+  .abr-arrow__icon svg, .abr-arrow.is-going .abr-arrow__icon svg { transition: none; }
 }
-.atlas__map svg.has-selection path.has-wine:not(.is-active) { opacity: .35; }
-.atlas__map path:focus-visible { outline: none; stroke: var(--text); stroke-width: 3; }
+@media (max-width: 760px) {
+  .abr-stage { padding: var(--u4) var(--u2); }
+  .abr__pin { width: 18px; height: 26px; }
+  .abr__name { font-size: 20px; }
+  .abr-arrow { white-space: normal; }
+  .abr-arrow__label { max-width: 112px; }
+  .abr-arrow__icon { width: 40px; height: 40px; }
+  .abr-arrow__icon svg { width: 20px; height: 20px; }
+}
 .atlas__credit { margin-top: var(--u2); font-size: var(--t1); color: var(--muted); opacity: .7; }
 .atlas__head { display: flex; align-items: baseline; justify-content: space-between; gap: var(--u3); margin-bottom: var(--u3); }
 .atlas__head .label { margin: 0; }
@@ -653,7 +787,7 @@ main { background: var(--cream); color: var(--text); }
   .tile__media { padding: var(--u2); }
   .tile__label { font-size: var(--t1); }
   .atlas { grid-template-columns: 1fr; }
-  .atlas__map { position: relative; top: auto; max-width: 280px; margin: 0 auto; }
+  .atlas__map { position: relative; top: auto; max-width: 360px; width: 100%; margin: 0 auto; }
   .card__name { font-size: var(--t2); }
   .sheet { padding: var(--u4) var(--u3) var(--u3); }
   .filters { gap: 0 var(--u3); }
@@ -730,7 +864,6 @@ main { background: var(--cream); color: var(--text); }
 .page-head h1 .fact--inline { display: inline; }
 
 /* ================= Prova: enoteca unita ================= */
-.atlas__map path.has-wine.is-dim { opacity: .3; }
 .card--bottles { display: flex; align-items: center; justify-content: space-between; gap: var(--u3); }
 .card__thumbs { display: flex; gap: var(--u1); flex: none; }
 .card__thumbs img { display: block; width: 48px; height: 60px; object-fit: cover; }
@@ -768,91 +901,7 @@ html:has(.page-head--light), html:has(.page-head--light) body { background: var(
 .page-head h1.page-head__long { max-width: 16em; margin: 0 auto; font-size: calc(var(--t1) * 6); line-height: 1.05; }
 @media (max-width: 760px) { .page-head h1.page-head__long { font-size: var(--t4); } }
 
-/* ---------- Galleria dei distillati (pagina L'enoteca) ---------- */
-.gallery {
-  position: relative;
-  margin-top: var(--u5);
-  padding-top: var(--u4);
-  border-top: 1px solid var(--line);
-  overflow: hidden;
-  isolation: isolate;
-}
-.gallery__head { margin-bottom: var(--u4); }
-/* le grandi parole dietro le foto */
-.gallery__words {
-  position: absolute;
-  inset: calc(var(--u5) * 1.5) 0 0;
-  z-index: -1;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: space-around;
-  font: 400 calc(var(--t1) * 20)/.85 var(--serif);
-  color: #efe4d4;
-  letter-spacing: -.02em;
-  pointer-events: none;
-  user-select: none;
-}
-/* colonne con le linee verticali sottili, come una griglia */
-.gallery__wall {
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: var(--u4);
-  padding-bottom: var(--u5);
-  background: repeating-linear-gradient(90deg, transparent 0, transparent calc(25% - 1px), var(--line) calc(25% - 1px), var(--line) 25%);
-}
-.gallery__col { display: flex; flex-direction: column; gap: var(--u5); }
-.gallery__col:nth-child(2) { padding-top: calc(var(--u5) * 2); }
-.gallery__col:nth-child(3) { padding-top: var(--u4); }
-.gallery__col:nth-child(4) { padding-top: calc(var(--u5) * 1.5); }
-.gallery__item { margin: 0; }
-.gallery__item--small { width: 75%; margin-left: auto; }
-.gallery__frame {
-  display: block;
-  padding: var(--u2);
-  background: #fff;
-  box-shadow: 0 18px 40px -24px rgba(var(--shade), .45);
-  transition: transform 450ms var(--ease-spring), box-shadow 280ms var(--ease-out);
-}
-.gallery__frame img { display: block; width: 100%; height: auto; aspect-ratio: 4 / 5; object-fit: cover; }
-.gallery__item figcaption { padding: var(--u2) var(--u1) 0; }
-@media (hover: hover) and (pointer: fine) {
-  .gallery__item:hover .gallery__frame { transform: rotate(-1.5deg) scale(1.03); box-shadow: 0 28px 50px -24px rgba(var(--shade), .55); }
-}
-@media (max-width: 760px) {
-  .gallery__words { font-size: calc(var(--t1) * 8); }
-  .gallery__wall {
-    grid-template-columns: repeat(2, 1fr);
-    gap: var(--u3);
-    background: repeating-linear-gradient(90deg, transparent 0, transparent calc(50% - 1px), var(--line) calc(50% - 1px), var(--line) 50%);
-  }
-  .gallery__col { gap: var(--u5); }
-  .gallery__col:nth-child(2) { padding-top: var(--u5); }
-  .gallery__frame { padding: var(--u1); }
-  .gallery__item .tile__name { font-size: var(--t2); }
-}
-
-/* ---------- Movimento: mappa che si disegna, cantine che rientrano, foto che si sviluppano ---------- */
-.atlas__map svg.map-pending path {
-  fill-opacity: 0;
-  stroke: var(--muted);
-  stroke-dasharray: var(--len);
-  stroke-dashoffset: var(--len);
-}
-.atlas__map svg.map-drawing path {
-  stroke-dasharray: var(--len);
-  transition:
-    stroke-dashoffset 1100ms cubic-bezier(.16, 1, .3, 1) var(--d),
-    fill-opacity 600ms linear calc(var(--d) + 500ms),
-    stroke 500ms linear calc(var(--d) + 700ms);
-}
-/* le regioni del vino si "riempiono" dal basso con una leggera pressione */
-.atlas__map svg.map-drawing path.has-wine { animation: wine-in 700ms cubic-bezier(.16, 1, .3, 1) calc(var(--d) + 400ms) both; }
-@keyframes wine-in {
-  from { transform: scale(.92); }
-  60% { transform: scale(1.05); }
-  to { transform: scale(1); }
-}
+/* ---------- Movimento: cantine che rientrano ---------- */
 
 .atlas__list li.is-entering { animation: card-in 380ms cubic-bezier(.16, 1, .3, 1) calc(var(--i) * 40ms) both; }
 @keyframes card-in {
@@ -860,7 +909,6 @@ html:has(.page-head--light), html:has(.page-head--light) body { background: var(
 }
 [data-titolo-regione], [data-conteggio] { transition: opacity 200ms linear; }
 
-.gallery__item { will-change: transform; }
 
 @media (prefers-reduced-motion: reduce) {
   .atlas__list li.is-entering { animation: card-fade 200ms linear both; }
@@ -1004,3 +1052,285 @@ html:has(.page-head--light), html:has(.page-head--light) body { background: var(
 
 /* Recensioni su telefono: "158 recensioni." va a capo tutta insieme, senza spezzarsi */
 @media (max-width: 760px) { .reviews .title .fact { display: block; white-space: nowrap; } }
+
+/* ---------- Prenota: finestra con nome, persone e giorno (js/prenota.js) ---------- */
+.sheet--prenota { width: min(480px, calc(100% - var(--u3))); padding: var(--u4) var(--u4) var(--u3); }
+.sheet--prenota .sheet__name { margin-top: 0; padding-right: var(--u4); }
+.prenota { margin-top: var(--u3); }
+.prenota__campo { border: 0; min-width: 0; margin-bottom: var(--u3); }
+.prenota__label {
+  display: block;
+  margin-bottom: var(--u1);
+  padding: 0;
+  font-size: var(--t1);
+  font-weight: 700;
+  letter-spacing: .13em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+.prenota__input {
+  display: block;
+  width: 100%;
+  min-height: 48px;
+  padding: 0 var(--u2);
+  border: 1px solid var(--line);
+  border-radius: 0;
+  background: #fff;
+  font: 500 16px/1.2 var(--sans); /* 16 px: su iPhone sotto questa misura la pagina si ingrandisce */
+  color: var(--text);
+}
+.prenota__input:focus-visible { outline: 2px solid var(--text); outline-offset: 2px; border-color: var(--text); }
+.prenota__input[aria-invalid="true"] { border-color: var(--wine-deep); }
+.prenota__errore { margin-top: var(--u1); font-size: 14px; font-weight: 500; color: var(--wine-deep); }
+
+.prenota__passi { display: flex; align-items: center; gap: var(--u2); }
+.prenota__passo {
+  width: 48px;
+  height: 48px;
+  border: 1px solid var(--text);
+  border-radius: 999px;
+  background: none;
+  font: 400 24px/1 var(--sans);
+  color: var(--text);
+  cursor: pointer;
+  touch-action: manipulation;
+}
+.prenota__passo:disabled { opacity: .3; cursor: default; }
+.prenota__passo:focus-visible { outline: 2px solid var(--text); outline-offset: 3px; }
+.prenota__numero { min-width: 2ch; text-align: center; font: 400 var(--t4)/1 var(--serif); }
+
+.prenota__giorni { display: grid; grid-template-columns: repeat(4, 1fr); gap: var(--u1); }
+.prenota__giorno { position: relative; cursor: pointer; }
+.prenota__giorno input { position: absolute; opacity: 0; inset: 0; margin: 0; cursor: pointer; }
+.prenota__giorno span {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 56px;
+  padding: var(--u1);
+  border: 1px solid var(--line);
+  background: #fff;
+  font-size: 13px;
+  line-height: 1.3;
+  color: var(--muted);
+  text-align: center;
+  transition: background .15s ease, color .15s ease, border-color .15s ease;
+}
+.prenota__giorno b { font-weight: 700; color: var(--text); text-transform: capitalize; }
+.prenota__giorno input:checked + span { background: var(--wine-deep); border-color: var(--wine-deep); color: var(--ink); }
+.prenota__giorno input:checked + span b { color: var(--ink); }
+.prenota__giorno input:focus-visible + span { outline: 2px solid var(--text); outline-offset: 2px; }
+@media (hover: hover) and (pointer: fine) {
+  .prenota__giorno:hover span { border-color: var(--text); }
+}
+.prenota__altra { margin-top: var(--u1); }
+.prenota__altra[hidden], .prenota__errore[hidden] { display: none; }
+
+.btn--pieno { background: var(--wine-deep); border-color: var(--wine-deep); color: var(--ink); }
+.btn--pieno:hover, .btn--pieno:focus-visible { background: #5e1621; border-color: #5e1621; color: var(--ink); }
+.prenota__invia { width: 100%; justify-content: center; min-height: 56px; cursor: pointer; font-family: var(--sans); }
+.prenota__nota { margin-top: var(--u2); font-size: 14px; color: var(--muted); text-align: center; }
+
+@media (max-width: 760px) {
+  .sheet--prenota { padding: var(--u3); }
+  .sheet--prenota .sheet__name { font-size: 36px; }
+  .prenota__campo { margin-bottom: var(--u2); }
+}
+
+/* ================= Prova conversione (8 novembre 2026): Prenota sempre a portata ================= */
+
+/* Prenota nel menu: l'unico tasto pieno del sito. Vino sul crema, crema sulla foto. */
+.bar .nav li .nav__link.nav__link--cta {
+  padding: 0 20px;
+  border-radius: 999px;
+  background: var(--wine-deep);
+  color: var(--ink);
+  text-shadow: none;
+}
+.bar .nav li .nav__link.nav__link--cta::after { content: none; }
+@media (hover: hover) and (pointer: fine) {
+  .bar .nav li .nav__link.nav__link--cta:hover { background: #5e1621; color: var(--ink); }
+}
+.bar .nav li .nav__link.nav__link--cta:active,
+.bar .nav li .nav__link.nav__link--cta.is-pressed { background: #5e1621; color: var(--ink); }
+@media (min-width: 761px) {
+  .hero .bar .nav li .nav__link.nav__link--cta { background: var(--ink); color: var(--text); }
+  .hero .bar .nav li .nav__link.nav__link--cta:active,
+  .hero .bar .nav li .nav__link.nav__link--cta.is-pressed { background: var(--wine-soft); color: var(--text); }
+}
+@media (min-width: 761px) and (hover: hover) and (pointer: fine) {
+  .hero .bar .nav li .nav__link.nav__link--cta:hover { background: var(--wine-soft); color: var(--text); }
+}
+@media (max-width: 760px) {
+  .bar .nav li .nav__link.nav__link--cta { min-height: 44px; padding: 0 14px; }
+  /* con Prenota a capsula la barra del telefono è più piena: logo un filo più piccolo e voci più vicine */
+  .grande .hero .bar .brand img, .page-head--light .brand img { height: 30px; }
+  /* Menu a quattro voci (10 novembre 2026): su telefono non sta più su una riga.
+     Logo e Prenota restano sopra, L'enoteca e Birre e distillati vanno su una riga loro, sotto.
+     Home non compare: ci porta già il logo. Vale per la home e per le pagine interne. */
+  .hero .bar, .page-head--light .bar { position: relative; flex-wrap: wrap; row-gap: 0; }
+  .hero .bar .brand, .page-head--light .bar .brand { display: flex; align-items: center; min-height: 44px; }
+  .hero .bar .bar__end { width: 100%; }
+  .grande .hero .bar .nav, .page-head--light .bar .nav { width: 100%; justify-content: flex-start; gap: var(--u3); }
+  .page-head--light .nav li:first-child { display: none; }
+  .bar .nav li:last-child { position: absolute; top: 0; right: 0; }
+  .hero .bar .nav li:last-child { top: var(--u2); right: var(--u3); }
+}
+
+@media (max-width: 380px) {
+  .hero .bar .nav li .nav__link, .page-head .bar .nav li .nav__link { letter-spacing: .04em; }
+  .bar .nav li .nav__link.nav__link--cta { padding: 0 12px; }
+}
+
+/* Tasto pieno vino (anche nel modulo Prenota) */
+.btn--pieno { cursor: pointer; }
+
+/* Prima schermata: Prenota sotto il titolo */
+.hero__cta { margin-top: var(--u4); }
+.grande .hero__cta { min-height: 60px; padding: 0 36px; font-size: 15px; }
+
+/* Righe di tasti: Prenota prima, il secondario accanto */
+.cta-row { display: flex; flex-wrap: wrap; align-items: center; gap: var(--u2) var(--u3); margin-top: var(--u4); }
+.reviews__cta .text-link { font-size: 14px; }
+@media (max-width: 760px) {
+  .grande .hero__cta { margin-top: var(--u3); }
+  .reviews__cta { flex-direction: column; align-self: stretch; }
+  .reviews__cta .btn { width: 100%; justify-content: center; }
+}
+
+/* L'enoteca: Prenota nella scheda della cantina e in fondo all'elenco */
+.sheet__cta { width: 100%; justify-content: center; margin-top: var(--u3); }
+.cantine__cta { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: var(--u3); }
+
+/* Piede: Prenota in cima ai contatti, Chiama e Indicazioni comodi da toccare */
+.footer .footer__cta.btn { margin-bottom: var(--u2); padding: 0 20px; letter-spacing: .08em; white-space: nowrap; }
+.footer__link--big { display: inline-flex; align-items: center; min-height: 44px; }
+
+/* Barra rapida: in alto su computer, in basso su telefono. Compare quando il menu e il tasto
+   della prima schermata escono dallo schermo (js/sito.js); su telefono sparisce sul piede. */
+.dock {
+  position: fixed;
+  z-index: 60;
+  left: 0;
+  right: 0;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--u3);
+  background: var(--cream);
+  color: var(--text);
+  font-family: var(--sans);
+  visibility: hidden;
+  transition: transform 320ms var(--ease-out), visibility 0s linear 320ms;
+}
+.dock.is-visible { visibility: visible; transform: none; transition: transform 320ms var(--ease-out), visibility 0s; }
+.dock__brand { line-height: 0; }
+.dock__brand img { display: block; height: 36px; width: auto; }
+.dock__actions { display: flex; align-items: center; gap: var(--u4); }
+.dock__link, .dock__call {
+  display: inline-flex;
+  align-items: center;
+  min-height: 48px;
+  font-weight: 700;
+  font-size: 12px;
+  letter-spacing: .13em;
+  text-transform: uppercase;
+  color: var(--text);
+  text-decoration: none;
+}
+.dock__call-short { display: none; }
+@media (min-width: 761px) { .dock__call { display: none; } }
+.dock .dock__cta.btn { min-height: 44px; padding: 0 24px; font-size: 12px; }
+@media (min-width: 761px) {
+  .dock { top: 0; padding: var(--u2) var(--u4); box-shadow: 0 1px 0 var(--line); transform: translateY(-100%); }
+}
+@media (max-width: 760px) {
+  .dock {
+    bottom: 0;
+    padding: var(--u2) var(--u3) calc(var(--u2) + env(safe-area-inset-bottom));
+    box-shadow: 0 -1px 0 var(--line), 0 -12px 32px -16px rgba(var(--shade), .35);
+    transform: translateY(100%);
+  }
+  .dock__brand, .dock__link, .dock__call-long { display: none; }
+  .dock__call-short { display: inline; }
+  .dock__actions { width: 100%; gap: var(--u2); }
+  .dock__call { justify-content: center; min-height: 52px; border: 1px solid var(--text); border-radius: 999px; }
+  .dock .dock__cta.btn { flex: 1; justify-content: center; min-height: 52px; padding: 0 16px; font-size: 13px; letter-spacing: .08em; white-space: nowrap; }
+  .dock__call { padding: 0 18px; }
+}
+@media (prefers-reduced-motion: reduce) { .dock, .dock.is-visible { transition: none; } }
+
+/* ================= Pagina Birre e distillati (10 novembre 2026) =================
+   Tutto si disegna da js/prodotti.js (js/birre-distillati.js): qui ci sono solo gli stili. */
+.bd { max-width: 1440px; margin: 0 auto; }
+
+/* Due schede: tasti come quelli del menu (stessa classe .nav__link, tre stati), al centro sotto il titolo.
+   La scheda aperta ha la linea ferma sul filo. */
+.switch { display: flex; justify-content: center; gap: var(--u4); margin-bottom: var(--u4); border-bottom: 1px solid var(--line); }
+.switch .switch__tab { color: var(--muted); text-shadow: none; font-size: var(--t2); letter-spacing: .08em; min-height: var(--u4); }
+.switch .switch__tab::after { bottom: -1px; }
+.switch .switch__tab[aria-selected="true"] { color: var(--text); }
+.switch .switch__tab[aria-selected="true"]::after { transform: scaleX(1); transform-origin: left center; }
+@media (hover: hover) and (pointer: fine) {
+  .switch .switch__tab:hover { color: var(--text); }
+}
+.switch .switch__tab:active,
+.switch .switch__tab.is-pressed { color: var(--wine-deep); }
+.switch .switch__tab:focus-visible { color: var(--text); outline-color: var(--text); }
+
+.panel { animation: panel-in 380ms cubic-bezier(.16, 1, .3, 1); }
+.panel[hidden] { display: none; }
+@keyframes panel-in { from { opacity: 0; transform: translateY(12px); } }
+
+.bd__block[hidden] { display: none; }
+.bd__block + .bd__block { margin-top: var(--u5); padding-top: var(--u4); border-top: 1px solid var(--line); }
+.bd__block[hidden] + .bd__block { margin-top: 0; padding-top: 0; border-top: 0; }
+.bd__head { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 0 var(--u4); margin-bottom: var(--u3); }
+.bd__head .label, .bd__head .filters { margin-bottom: 0; }
+
+/* I più richiesti: foto grande e nome a 48 px, due per riga */
+.feature { list-style: none; display: grid; grid-template-columns: repeat(2, 1fr); gap: var(--u4) var(--u3); }
+.feature__item { display: grid; grid-template-columns: 7fr 5fr; gap: var(--u3); align-items: end; }
+.feature__photo { margin-bottom: 0; }
+.feature__name { margin-top: var(--u1); font: 400 var(--t4)/1.05 var(--serif); letter-spacing: -.005em; }
+@media (hover: hover) and (pointer: fine) {
+  .feature__item:hover .feature__photo img { transform: scale(1.04); }
+}
+
+/* Scaffale: le bottiglie rientrano una dopo l'altra a ogni cambio di filtro */
+.grid--products li.is-entering { animation: card-in 380ms cubic-bezier(.16, 1, .3, 1) calc(var(--i) * 40ms) both; }
+
+/* Liste scritte, senza foto: birre (nome, birrificio, stile, formato) e cocktail (nome, ingredienti) */
+.rows { list-style: none; border-top: 1px solid var(--line); }
+.row { display: grid; grid-template-columns: 1fr 1fr; gap: var(--u2) var(--u3); align-items: end; padding: var(--u3) 0; border-bottom: 1px solid var(--line); }
+/* l'ultima riga non ha il filo: sotto c'è già quello del tasto Prenota */
+.row:last-child { border-bottom: 0; }
+/* lista subito sotto le schede (Birre): il filo sopra è già quello delle schede */
+.panel > .rows { margin-top: calc(-1 * var(--u3)); border-top: 0; }
+.row__name { display: block; font: 400 var(--t4)/1.05 var(--serif); letter-spacing: -.005em; }
+.row__main .row__name { margin-top: var(--u1); }
+.row__flag { color: var(--muted); }
+.row__metas { display: grid; grid-template-columns: 1fr 1fr; gap: var(--u3); }
+.row__meta { font: 700 var(--t1)/1.8 var(--sans); letter-spacing: .13em; text-transform: uppercase; color: var(--muted); }
+.row__side { display: block; }
+.row__text { display: block; margin-bottom: var(--u1); font-size: var(--t2); line-height: 1.4; font-weight: 500; }
+
+@media (max-width: 1000px) {
+  .feature__item { grid-template-columns: 1fr; }
+}
+@media (max-width: 760px) {
+  .switch { gap: var(--u3); margin-bottom: var(--u3); }
+  .feature { grid-template-columns: 1fr; }
+  .bd__head { margin-bottom: var(--u2); }
+  .row { grid-template-columns: 1fr; }
+  .row__metas { display: flex; flex-wrap: wrap; gap: 0; }
+  .row__meta + .row__meta::before { content: "·"; margin: 0 var(--u1); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .panel { animation: none; }
+  .grid--products li.is-entering { animation: card-fade 200ms linear both; }
+}
+
+/* Scheda della cantina: bottiglia ancora senza foto (10 novembre 2026) */
+.sheet__nofoto { display: block; width: 80px; height: 100px; flex: none; background: #efe6d8; }

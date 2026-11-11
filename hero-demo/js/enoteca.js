@@ -1,22 +1,31 @@
-// Pagina L'enoteca: mappa delle cantine con i vini dentro, poi "Oltre il vino" per distillati e birre
+// Pagina L'enoteca: una mappa per regione (si apre sull'Abruzzo) con un segnaposto per ogni comune delle cantine.
+// Regole prese dalla mappa "Syndicus" di Agence Van den Abeele: comuni chiari, al passaggio il comune si scurisce,
+// compare il nome e gli altri segnaposti spariscono. Fuori dalla mappa, le frecce puntano verso le altre regioni
+// trattate: cliccandole la vista scorre in quella direzione e arriva alla mappa della regione.
 (function () {
-  var REG = window.REGIONI_ENOTECA;
+  var REGIONI = window.REGIONI_ENOTECA;
+  var IDS = Object.keys(REGIONI);
   var CANT = window.CANTINE_ENOTECA;
   var PROD = {};
   window.PRODOTTI.forEach(function (p) { PROD[p.id] = p; });
 
-  var mappa = document.querySelector("[data-mappa]");
+  var palco = document.querySelector("[data-palco]");
+  var vistaBox = document.querySelector("[data-vista]");
   var elenco = document.querySelector("[data-elenco]");
   var titolo = document.querySelector("[data-titolo-regione]");
   var conteggio = document.querySelector("[data-conteggio]");
-  var stato = { regione: "tutte", tipo: "tutti" };
+  var tutte = document.querySelector("[data-tutte]");
+  var calmo = matchMedia("(prefers-reduced-motion: reduce)");
+  var stato = { regione: IDS[0], comune: null, tipo: "tutti" };
+  var vista = null; // la mappa sullo schermo: { id, el, punti }
 
-  function haTipo(c, t) {
-    return t === "tutti" || c.bottiglie.some(function (id) { return PROD[id] && PROD[id].tipo === t; });
+  function bottiglieDi(c, t) {
+    return c.bottiglie.filter(function (id) { return PROD[id] && (t === "tutti" || PROD[id].tipo === t); });
   }
   function visibili() {
     return CANT.filter(function (c) {
-      return (stato.regione === "tutte" || c.regione === stato.regione) && haTipo(c, stato.tipo);
+      return c.regione === stato.regione && (!stato.comune || c.comune === stato.comune) &&
+        bottiglieDi(c, stato.tipo).length > 0;
     });
   }
 
@@ -43,82 +52,316 @@
   scheda.addEventListener("click", function (e) { if (e.target === scheda) scheda.close(); });
   function apriScheda(c) {
     scheda.querySelectorAll("[data-s]").forEach(function (el) { el.textContent = c[el.dataset.s]; });
-    var box = scheda.querySelector("[data-bottiglie]");
-    box.textContent = "";
+    var lista = scheda.querySelector("[data-bottiglie]");
+    lista.textContent = "";
     c.bottiglie.forEach(function (id) {
       var p = PROD[id];
       var li = document.createElement("li");
-      li.innerHTML = '<img src="img/prodotti/' + p.foto + '" alt="" width="80" height="100">' +
+      // senza foto: al posto della bottiglia resta un riquadro vuoto della stessa misura, così i nomi restano in fila
+      li.innerHTML = (p.foto ? '<img src="img/prodotti/' + p.foto + '" alt="" width="80" height="100">' : '<span class="sheet__nofoto" aria-hidden="true"></span>') +
         '<span><span class="tile__nick">' + p.tipo + '</span><span class="tile__name">' + p.nome + '</span>' +
         '<span class="tile__zone">' + p.cantina + '</span></span>';
-      box.appendChild(li);
+      lista.appendChild(li);
     });
     scheda.showModal();
   }
 
-  // ---------- Mappa ----------
-  var tip = document.querySelector("[data-tip]");
-  var figura = mappa.parentElement;
-  mappa.querySelectorAll("path").forEach(function (p) {
-    var r = p.dataset.regione;
-    if (!REG[r]) return;
-    p.classList.add("has-wine");
-    p.setAttribute("tabindex", "0");
-    p.setAttribute("role", "button");
-    p.setAttribute("aria-label", REG[r]);
-    p.addEventListener("click", function () { scegliRegione(r); });
-    p.addEventListener("keydown", function (e) {
-      if (e.key === "Enter" || e.key === " ") { e.preventDefault(); scegliRegione(r); }
-    });
-    p.addEventListener("pointerenter", function () {
-      tip.textContent = "Esplora le cantine " + window.DI_REGIONE[r];
-      tip.classList.add("is-on");
-    });
-    p.addEventListener("pointermove", function (e) {
-      var b = figura.getBoundingClientRect();
-      tip.style.left = (e.clientX - b.left) + "px";
-      tip.style.top = (e.clientY - b.top) + "px";
-    });
-    p.addEventListener("pointerleave", function () { tip.classList.remove("is-on"); });
-  });
+  // ---------- Mappe: si caricano da img/mappe/ solo quando servono ----------
+  var caricate = {};
+  function carica(id) {
+    if (!caricate[id]) {
+      caricate[id] = fetch(REGIONI[id].mappa).then(function (r) {
+        if (!r.ok) throw new Error("Mappa non trovata: " + REGIONI[id].mappa);
+        return r.text();
+      });
+      caricate[id].catch(function () { delete caricate[id]; });
+    }
+    return caricate[id];
+  }
 
-  // ---------- Filtri: regione e tipo di vino ----------
-  function bottoni(box, valori, etichetta, alClic) {
-    valori.forEach(function (v) {
+  // segnaposto come quelli di Google Maps: goccia vino con un punto crema, la punta sul comune
+  var GOCCIA = '<svg class="abr__drop" viewBox="0 0 24 34" aria-hidden="true">' +
+    '<path d="M12 33.2C9.6 29.5 .5 20.3 .5 12a11.5 11.5 0 0 1 23 0c0 8.3-9.1 17.5-11.5 21.2z"/>' +
+    '<circle cx="12" cy="12" r="4.3"/></svg>';
+
+  function costruisciVista(id, testo) {
+    var el = document.createElement("div");
+    el.className = "abr";
+    el.innerHTML = testo + '<div class="abr__pins"></div>';
+    var svg = el.querySelector("svg");
+    svg.setAttribute("role", "img");
+    svg.setAttribute("aria-label", "Mappa: " + REGIONI[id].nome + " con i comuni delle nostre cantine");
+    // ogni regione ha la sua forma: sta tutta dentro il riquadro quadrato, al centro
+    var vb = svg.viewBox.baseVal;
+    var r = vb.width / vb.height;
+    el.style.width = (r >= 1 ? 100 : r * 100) + "%";
+    el.style.height = (r >= 1 ? 100 / r : 100) + "%";
+    vistaBox.appendChild(el);
+
+    var v = { id: id, el: el, punti: [] };
+    var comuni = {};
+    svg.querySelectorAll("[data-comune]").forEach(function (p) { comuni[p.dataset.comune] = p; });
+    CANT.forEach(function (c) {
+      if (c.regione !== id || !c.comune) return;
+      var path = comuni[c.comune];
+      if (!path) { console.warn("Comune non trovato sulla mappa:", c.comune); return; }
+      var punto = v.punti.filter(function (o) { return o.comune === c.comune; })[0];
+      if (!punto) { punto = { comune: c.comune, path: path, cantine: [] }; v.punti.push(punto); }
+      punto.cantine.push(c);
+    });
+
+    var strato = el.querySelector(".abr__pins");
+    v.punti.forEach(function (o, k) {
+      var b = o.path.getBBox();
+      o.path.classList.add("has-wine");
+      var pin = document.createElement("button");
+      pin.type = "button";
+      pin.className = "abr__pin";
+      pin.style.left = ((b.x + b.width / 2 - vb.x) / vb.width * 100) + "%";
+      pin.style.top = ((b.y + b.height / 2 - vb.y) / vb.height * 100) + "%";
+      pin.style.setProperty("--i", k);
+      pin.innerHTML = GOCCIA + '<span class="abr__label"><span class="abr__name">' +
+        o.cantine.map(function (c) { return c.nome; }).join(" · ") +
+        '</span><span class="abr__place">' + o.comune + '</span></span>';
+      o.pin = pin;
+      strato.appendChild(pin);
+
+      function scegli() {
+        if (o.cantine.length === 1) apriScheda(o.cantine[0]);
+        else { stato.comune = o.comune; disegna(); }
+      }
+      pin.addEventListener("click", scegli);
+      o.path.addEventListener("click", function () { if (!pin.classList.contains("is-off")) scegli(); });
+      [pin, o.path].forEach(function (x) {
+        x.addEventListener("pointerenter", function () { accendi(o); });
+        x.addEventListener("pointerleave", function () { accendi(null); });
+      });
+      pin.addEventListener("focus", function () { accendi(o); });
+      pin.addEventListener("blur", function () { accendi(null); });
+    });
+
+    var confine = svg.querySelector(".abr__reg");
+    confine.style.setProperty("--len", Math.ceil(confine.getTotalLength()));
+    return v;
+  }
+
+  // Entrata di una mappa: il confine si disegna, i comuni compaiono, poi i segnaposti cadono uno alla volta
+  function entra(v) {
+    v.el.classList.add("abr--in");
+    void v.el.offsetWidth; // il browser registra prima lo stato di partenza, così la transizione parte
+    v.el.classList.remove("abr--pending");
+    // finita l'entrata tornano le transizioni normali (passaggio del mouse, filtri)
+    setTimeout(function () { v.el.classList.remove("abr--in"); }, 450 + v.punti.length * 70 + 500);
+  }
+
+  // un solo segnaposto acceso: il suo comune si scurisce, il nome compare, gli altri spariscono
+  function accendi(o) {
+    if (!vista) return;
+    if (o && o.pin.classList.contains("is-off")) o = null;
+    vista.el.classList.toggle("is-hovering", !!o);
+    vista.punti.forEach(function (p) {
+      p.pin.classList.toggle("is-hot", p === o);
+      p.path.classList.toggle("is-hot", p === o);
+    });
+  }
+  function puntoDi(c) {
+    return vista && vista.id === c.regione ? vista.punti.filter(function (o) { return o.comune === c.comune; })[0] : null;
+  }
+
+  // ---------- Frecce verso le altre regioni ----------
+  // La direzione è quella vera sulla carta: dal centro di questa regione al centro dell'altra.
+  // Ogni freccia sta sul bordo del riquadro, dove la sua direzione lo incontra.
+  var frecce = [];
+  var KX = Math.cos(44 * Math.PI / 180); // un grado di longitudine è più corto di uno di latitudine
+  var DISTANZA_MINIMA = 40;              // gradi tra due frecce, così non puntano mai tutte uguali
+  function gradiNormali(g) { return ((g + 180) % 360 + 360) % 360 - 180; }
+
+  // Le regioni quasi nella stessa direzione (Veneto e Trentino viste dall'Abruzzo) si aprono a ventaglio:
+  // l'ordine resta quello vero, la più a ovest resta la più a sinistra.
+  function direzioni(da) {
+    var lista = IDS.filter(function (id) { return id !== stato.regione; }).map(function (id) {
+      var a = REGIONI[id].centro;
+      return { id: id, g: Math.atan2(-(a[1] - da[1]), (a[0] - da[0]) * KX) * 180 / Math.PI };
+    });
+    if (lista.length < 2) return lista;
+    var mx = 0, my = 0;
+    lista.forEach(function (o) { mx += Math.cos(o.g * Math.PI / 180); my += Math.sin(o.g * Math.PI / 180); });
+    var media = Math.atan2(my, mx) * 180 / Math.PI;
+    lista.forEach(function (o) { o.r = gradiNormali(o.g - media); });
+    lista.sort(function (a, b) { return a.r - b.r; });
+    for (var giro = 0; giro < 30; giro += 1) {
+      for (var k = 1; k < lista.length; k += 1) {
+        var manca = DISTANZA_MINIMA - (lista[k].r - lista[k - 1].r);
+        if (manca > 0) { lista[k - 1].r -= manca / 2; lista[k].r += manca / 2; }
+      }
+    }
+    lista.forEach(function (o) { o.g = gradiNormali(o.r + media); });
+    return lista;
+  }
+
+  function creaFrecce() {
+    frecce.forEach(function (f) { f.el.remove(); });
+    frecce = [];
+    direzioni(REGIONI[stato.regione].centro).forEach(function (o) {
+      var id = o.id;
+      var dx = Math.cos(o.g * Math.PI / 180), dy = Math.sin(o.g * Math.PI / 180);
       var b = document.createElement("button");
       b.type = "button";
-      b.className = "filter";
-      b.dataset.v = v;
-      b.textContent = etichetta(v);
-      b.addEventListener("click", function () { alClic(v); });
-      box.appendChild(b);
+      b.className = "abr-arrow";
+      b.setAttribute("aria-label", "Vai alla mappa: " + REGIONI[id].nome);
+      b.style.setProperty("--a", o.g.toFixed(1) + "deg");
+      b.innerHTML = '<span class="abr-arrow__icon"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span>' +
+        '<span class="abr-arrow__label">' + REGIONI[id].nome + '</span>';
+      var f = { id: id, el: b, dx: dx, dy: dy };
+      b.addEventListener("click", function () { vai(f); });
+      palco.appendChild(b);
+      frecce.push(f);
     });
-    return function (scelto) {
-      box.querySelectorAll(".filter").forEach(function (b) { b.setAttribute("aria-pressed", String(b.dataset.v === scelto)); });
-    };
+    posizionaFrecce();
   }
-  var segnaRegione = bottoni(document.querySelector("[data-filtri]"), ["tutte"].concat(Object.keys(REG)),
-    function (v) { return v === "tutte" ? "Tutte" : REG[v]; }, scegliRegione);
-  var segnaTipo = bottoni(document.querySelector("[data-tipi-vino]"), ["tutti"].concat(window.SEZIONI.vini.tipi),
-    function (v) { return v === "tutti" ? "Tutti i vini" : v; }, function (t) { stato.tipo = t; disegna(); });
+  function posizionaFrecce() {
+    var W = palco.clientWidth, H = palco.clientHeight;
+    var R = palco.querySelector(".abr-arrow__icon") ? palco.querySelector(".abr-arrow__icon").offsetWidth / 2 : 24; // metà del cerchio
+    var M = R + 6;       // il centro del cerchio sta a 24 px dal bordo del riquadro
+    var SPAZIO = 12;
+    var lati = { top: [], bottom: [], left: [], right: [] };
+    // su telefono ai lati non c'è posto: le frecce stanno solo sopra o sotto la mappa
+    var stretto = W < 480;
+    frecce.forEach(function (f) {
+      var tx = f.dx ? (W / 2 - M) / Math.abs(f.dx) : Infinity;
+      var ty = f.dy ? (H / 2 - M) / Math.abs(f.dy) : Infinity;
+      if (stretto) {
+        f.lato = f.dy < 0 ? "top" : "bottom";
+        f.x = W / 2 + f.dx * (H / 2 - M) / Math.max(Math.abs(f.dy), 0.2);
+        f.y = f.dy < 0 ? M : H - M;
+        f.el.dataset.lato = f.lato;
+        lati[f.lato].push(f);
+        return;
+      }
+      var t = Math.min(tx, ty);
+      f.x = W / 2 + f.dx * t;
+      f.y = H / 2 + f.dy * t;
+      f.lato = ty <= tx ? (f.dy < 0 ? "top" : "bottom") : (f.dx < 0 ? "left" : "right");
+      f.el.dataset.lato = f.lato;
+      lati[f.lato].push(f);
+    });
+    // sopra e sotto: nome a destra della freccia; se due frecce si toccano, si scostano lungo il bordo
+    ["top", "bottom"].forEach(function (lato) {
+      var fila = lati[lato].sort(function (a, b) { return a.x - b.x; });
+      var fine = -Infinity;
+      fila.forEach(function (f) {
+        f.w = f.el.offsetWidth;
+        f.x0 = Math.max(f.x - R, fine + SPAZIO, 0);
+        fine = f.x0 + f.w;
+      });
+      var limite = W;
+      fila.slice().reverse().forEach(function (f) {
+        f.x0 = Math.min(f.x0, limite - f.w);
+        limite = f.x0 - SPAZIO;
+      });
+      fila.forEach(function (f) {
+        f.el.style.left = f.x0 + "px";
+        f.el.style.top = (f.y - R) + "px";
+      });
+    });
+    // a sinistra e a destra: nome sotto la freccia
+    ["left", "right"].forEach(function (lato) {
+      var fila = lati[lato].sort(function (a, b) { return a.y - b.y; });
+      var fine = -Infinity;
+      fila.forEach(function (f) {
+        var y0 = Math.max(f.y - R, fine + SPAZIO);
+        f.el.style.top = y0 + "px";
+        f.el.style.left = (lato === "left" ? f.x - R : f.x + R - f.el.offsetWidth) + "px";
+        fine = y0 + f.el.offsetHeight;
+      });
+    });
+  }
+  if (window.ResizeObserver) new ResizeObserver(posizionaFrecce).observe(palco);
+  else addEventListener("resize", posizionaFrecce);
 
-  function scegliRegione(r) { stato.regione = r; disegna(); }
+  // Viaggio verso un'altra regione: la mappa vecchia scivola via all'indietro, la nuova arriva dalla direzione
+  // della freccia, come se la carta scorresse sotto gli occhi. Poi i segnaposti cadono sulla nuova.
+  var inViaggio = false;
+  function vai(f) {
+    if (inViaggio || f.id === stato.regione) return;
+    inViaggio = true;
+    f.el.classList.add("is-going");
+    carica(f.id).then(function (testo) {
+      var vecchia = vista;
+      var nuova = costruisciVista(f.id, testo);
+      vista = nuova;
+      stato.regione = f.id;
+      stato.comune = null;
+      disegna();
+      if (calmo.matches || !nuova.el.animate) {
+        vecchia.el.remove();
+        creaFrecce();
+        inViaggio = false;
+        return;
+      }
+      var d = 45; // quanto scorre la carta, in % della mappa
+      vecchia.el.classList.add("is-leaving");
+      vecchia.el.animate([
+        { transform: "translate(0, 0)", opacity: 1 },
+        { transform: "translate(" + (-f.dx * d) + "%, " + (-f.dy * d) + "%)", opacity: 0 }
+      ], { duration: 420, easing: "cubic-bezier(.55, 0, .45, 1)", fill: "forwards" });
+      // la mappa vecchia se ne va comunque, anche se il browser ha messo in pausa le animazioni
+      setTimeout(function () { vecchia.el.remove(); }, 480);
+      nuova.el.classList.add("abr--pending");
+      nuova.el.animate([
+        { transform: "translate(" + (f.dx * d) + "%, " + (f.dy * d) + "%)", opacity: 0 },
+        { transform: "translate(0, 0)", opacity: 1 }
+      ], { duration: 520, delay: 60, easing: "cubic-bezier(.16, 1, .3, 1)", fill: "backwards" });
+      entra(nuova);
+      frecce.forEach(function (x) { x.el.classList.add("is-leaving"); });
+      setTimeout(function () { creaFrecce(); inViaggio = false; }, 460);
+    }).catch(function (e) {
+      console.error(e);
+      f.el.classList.remove("is-going");
+      inViaggio = false;
+    });
+  }
+
+  // ---------- Filtro per tipo di vino ----------
+  var tipiBox = document.querySelector("[data-tipi-vino]");
+  ["tutti"].concat(window.SEZIONI.vini.tipi).forEach(function (v) {
+    var b = document.createElement("button");
+    b.type = "button";
+    b.className = "filter";
+    b.dataset.v = v;
+    b.textContent = v === "tutti" ? "Tutti i vini" : v;
+    b.addEventListener("click", function () { stato.tipo = v; disegna(); });
+    tipiBox.appendChild(b);
+  });
+  tutte.addEventListener("click", function () { stato.comune = null; disegna(); });
 
   function disegna() {
-    segnaRegione(stato.regione);
-    segnaTipo(stato.tipo);
-    // sulla mappa restano accese solo le regioni con cantine di quel tipo di vino
-    mappa.querySelectorAll("path.has-wine").forEach(function (p) {
-      var r = p.dataset.regione;
-      var conTipo = CANT.some(function (c) { return c.regione === r && haTipo(c, stato.tipo); });
-      p.classList.toggle("is-dim", !conTipo || (stato.regione !== "tutte" && r !== stato.regione));
+    tipiBox.querySelectorAll(".filter").forEach(function (b) { b.setAttribute("aria-pressed", String(b.dataset.v === stato.tipo)); });
+
+    // sulla mappa restano solo i segnaposti con vini del tipo scelto
+    (vista ? vista.punti : []).forEach(function (o) {
+      var n = o.cantine.reduce(function (s, c) { return s + bottiglieDi(c, stato.tipo).length; }, 0);
+      var spento = n === 0 || (stato.comune && o.comune !== stato.comune);
+      o.pin.classList.toggle("is-off", spento);
+      o.pin.tabIndex = spento ? -1 : 0;
+      o.pin.setAttribute("aria-label", o.cantine.map(function (c) { return c.nome; }).join(", ") + ", " + o.comune + ": " + n + (n === 1 ? " vino" : " vini"));
+      o.path.classList.toggle("is-dim", spento);
     });
+
     var lista = visibili();
-    titolo.textContent = stato.regione === "tutte" ? "Tutta Italia" : REG[stato.regione];
+    titolo.textContent = stato.comune || REGIONI[stato.regione].nome;
+    tutte.hidden = !stato.comune;
     conteggio.textContent = lista.length + (lista.length === 1 ? " cantina" : " cantine");
     elenco.textContent = "";
+    if (!CANT.some(function (c) { return c.regione === stato.regione; })) {
+      var vuoto = document.createElement("li");
+      vuoto.className = "draft-note atlas__empty";
+      vuoto.textContent = "Cantine " + (REGIONI[stato.regione].nome === "Veneto" ? "del Veneto" : "di questa regione") + " da inserire: nomi e comuni da chiedere al titolare.";
+      elenco.appendChild(vuoto);
+    }
     lista.forEach(function (c, i) {
-      var foto = c.bottiglie.map(function (id) {
+      // nell'elenco al massimo tre foto; le bottiglie senza foto non compaiono qui, solo nella scheda
+      var foto = c.bottiglie.filter(function (id) { return PROD[id].foto; }).slice(0, 3).map(function (id) {
         return '<img src="img/prodotti/' + PROD[id].foto + '" alt="" width="48" height="60" loading="lazy">';
       }).join("");
       var li = document.createElement("li");
@@ -129,7 +372,11 @@
           '<span class="tile__zone">' + c.zona + '</span></span>' +
           '<span class="card__thumbs">' + foto + '</span>' +
         '</button>';
-      li.querySelector("button").addEventListener("click", function () { apriScheda(c); });
+      var bottone = li.querySelector("button");
+      bottone.addEventListener("click", function () { apriScheda(c); });
+      // passando sulla cantina nell'elenco si accende il suo segnaposto
+      bottone.addEventListener("pointerenter", function () { accendi(puntoDi(c)); });
+      bottone.addEventListener("pointerleave", function () { accendi(null); });
       // a ogni cambio di filtro le cantine rientrano una dopo l'altra (al massimo 240 ms di attesa)
       li.className = "is-entering";
       li.style.setProperty("--i", Math.min(i, 6));
@@ -138,85 +385,17 @@
   }
   disegna();
 
-  // ---------- La mappa si disegna quando arriva sullo schermo ----------
-  // prima i confini da nord a sud, poi il vino riempie le regioni con cantine
-  (function () {
-    if (matchMedia("(prefers-reduced-motion: reduce)").matches) return;
-    var percorsi = [].slice.call(mappa.querySelectorAll("path"));
-    percorsi
-      .map(function (p) { return { p: p, y: p.getBBox().y }; })
-      .sort(function (a, b) { return a.y - b.y; })
-      .forEach(function (o, k) {
-        o.p.style.setProperty("--len", Math.ceil(o.p.getTotalLength()));
-        var ritardo = Math.round(k * 30);
-        if (o.p.classList.contains("has-wine")) ritardo += 700;
-        o.p.style.setProperty("--d", ritardo + "ms");
-      });
-    mappa.classList.add("map-pending");
-    quandoVisibile(mappa, 0.75, function () {
-      mappa.classList.add("map-drawing");
-      setTimeout(function () { mappa.classList.remove("map-pending"); }, 30);
-      // finito il disegno tornano le transizioni normali (passaggio del mouse, filtri)
-      setTimeout(function () { mappa.classList.remove("map-drawing"); }, 2600);
-    });
-  })();
-
-  // ---------- Oltre il vino: galleria dei distillati ----------
-  // Come la galleria di Tripletta: mentre la sezione scorre, ogni foto sale o scende per conto suo,
-  // con un movimento ammorbidito. Qui gli spostamenti sono circa un terzo dei loro.
-  var muro = document.querySelector("[data-galleria]");
-  var sezione = muro.closest(".gallery");
-  var distillati = window.PRODOTTI.filter(function (p) { return p.sezione === "distillati" && p.foto; });
-  var stretto = matchMedia("(max-width: 760px)");
-  var calmo = matchMedia("(prefers-reduced-motion: reduce)");
-  // da dove parte e dove arriva ogni foto, in % della sua altezza (inizio sezione → fine sezione)
-  var PERCORSI = [[18, -18], [-8, 14], [26, -6], [4, -22], [-14, 10], [22, 2]];
-  var foto = [];
-
-  function costruisci() {
-    var n = stretto.matches ? 2 : 4;
-    muro.textContent = "";
-    var colonne = [];
-    for (var i = 0; i < n; i += 1) {
-      var col = document.createElement("div");
-      col.className = "gallery__col";
-      muro.appendChild(col);
-      colonne.push(col);
+  // ---------- Prima mappa ----------
+  carica(stato.regione).then(function (testo) {
+    vista = costruisciVista(stato.regione, testo);
+    disegna();
+    creaFrecce();
+    if (!calmo.matches) {
+      vista.el.classList.add("abr--pending");
+      var prima = vista;
+      quandoVisibile(palco, 0.8, function () { entra(prima); });
     }
-    foto = distillati.map(function (p, i) {
-      var f = document.createElement("figure");
-      f.className = "gallery__item" + (i % 3 === 1 ? " gallery__item--small" : "");
-      f.innerHTML = '<span class="gallery__frame"><img src="img/prodotti/' + p.foto + '" alt="' + p.nome + '" width="800" height="1000" loading="lazy"></span>' +
-        '<figcaption><span class="tile__nick">' + p.tipo + '</span><span class="tile__name">' + p.nome + '</span>' +
-        '<span class="tile__zone">' + [p.cantina, p.zona].filter(Boolean).join(" · ") + '</span></figcaption>';
-      colonne[i % n].appendChild(f);
-      var percorso = PERCORSI[i % PERCORSI.length];
-      return { el: f, da: percorso[0], a: percorso[1], ora: null };
-    });
-    aggiorna();
-  }
-
-  var giro = null;
-  function aggiorna() {
-    giro = null;
-    if (calmo.matches) { foto.forEach(function (o) { o.el.style.transform = ""; }); return; }
-    var r = sezione.getBoundingClientRect();
-    // 0 quando la sezione entra dal basso, 1 quando esce dall'alto
-    var p = Math.min(1, Math.max(0, (innerHeight - r.top) / (innerHeight + r.height)));
-    var ancora = false;
-    foto.forEach(function (o) {
-      // su telefono le foto sono vicine: metà movimento, così non si coprono
-      var meta = (o.da + (o.a - o.da) * p) * (stretto.matches ? 0.5 : 1);
-      // ogni passo copre solo una parte della distanza: il movimento arriva morbido, senza scatti
-      o.ora = o.ora === null ? meta : o.ora + (meta - o.ora) * 0.12;
-      if (Math.abs(meta - o.ora) > 0.05) ancora = true;
-      o.el.style.transform = "translate3d(0," + o.ora.toFixed(2) + "%,0)";
-    });
-    if (ancora) giro = requestAnimationFrame(aggiorna);
-  }
-  function chiedi() { if (!giro) giro = requestAnimationFrame(aggiorna); }
-  addEventListener("scroll", chiedi, { passive: true });
-  addEventListener("resize", chiedi);
-  stretto.addEventListener("change", costruisci);
-  costruisci();
+    // le altre mappe si preparano mentre il visitatore guarda la prima
+    setTimeout(function () { IDS.forEach(function (id) { carica(id).catch(function () {}); }); }, 1500);
+  }).catch(function (e) { console.error(e); });
 })();

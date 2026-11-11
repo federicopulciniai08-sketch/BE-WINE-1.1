@@ -1,0 +1,120 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<!-- Demo in attesa di conferma del titolare: fuori dai motori di ricerca -->
+<meta name="robots" content="noindex, nofollow">
+<title>Birre e distillati · Be Wine, Montesilvano</title>
+<meta name="description" content="Gin, rum, whisky, amari e birre in bottiglia da Be Wine, a Montesilvano Marina.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@500;700&family=Instrument+Serif&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/sito.css?v=58">
+</head>
+<body>
+  <header class="page-head page-head--light">
+    <div class="bar">
+      <a class="brand" href="index.html"><img src="img/logo-scuro.png" alt="Be Wine" width="776" height="254"></a>
+      <ul class="nav">
+        <li><a class="nav__link" href="index.html">Home</a></li>
+        <li><a class="nav__link" href="enoteca.html">L'enoteca</a></li>
+        <li><a class="nav__link" href="birre-distillati.html" aria-current="page">Birre e distillati</a></li>
+        <li><a class="nav__link nav__link--cta" href="https://wa.me/393351618047?text=Buonasera%2C%20vorrei%20prenotare%20un%20tavolo%20da%20Be%20Wine%20per%20" target="_blank" rel="noopener">Prenota</a></li>
+      </ul>
+    </div>
+    <div class="page-head__copy">
+      <!-- Titolo e sottotitolo approvati il 10 novembre 2026 -->
+      <h1 class="page-head__long">Non solo <span class="fact fact--inline">vino.</span></h1>
+      <p class="sub">Birre e distillati</p>
+    </div>
+  </header>
+
+  <main>
+    <div class="section bd">
+      <p class="draft-note">Bottiglie prese dalle foto del fotografo, birre provvisorie: elenco da confermare col titolare.</p>
+
+      <!-- Due schede: se ne vede una alla volta. Quella aperta si legge dall'indirizzo (#distillati, #birre). -->
+      <div class="switch" role="tablist" aria-label="Distillati o birre">
+        <a class="nav__link switch__tab" role="tab" id="tab-distillati" href="#distillati" data-tab="distillati" aria-controls="scheda-distillati" aria-selected="true">Distillati</a>
+        <a class="nav__link switch__tab" role="tab" id="tab-birre" href="#birre" data-tab="birre" aria-controls="scheda-birre" aria-selected="false" tabindex="-1">Birre</a>
+      </div>
+
+      <!-- Tutto quello che c'è nelle schede viene da js/prodotti.js -->
+      <section class="panel" role="tabpanel" id="scheda-distillati" aria-labelledby="tab-distillati" data-pannello="distillati">
+        <div class="bd__block" data-blocco>
+          <h2 class="label">I più richiesti</h2>
+          <ul class="feature" data-top></ul>
+        </div>
+        <div class="bd__block" data-blocco>
+          <div class="bd__head">
+            <h2 class="label">Scaffale</h2>
+            <div class="filters" role="group" aria-label="Tipo di distillato" data-filtri></div>
+          </div>
+          <ul class="grid grid--products grid--small" data-scaffale></ul>
+        </div>
+        <div class="bd__block" data-blocco hidden>
+          <h2 class="label">Cocktail</h2>
+          <ul class="rows rows--cocktail" data-cocktail></ul>
+        </div>
+      </section>
+
+      <section class="panel" role="tabpanel" id="scheda-birre" aria-labelledby="tab-birre" data-pannello="birre" hidden>
+        <ul class="rows" data-birre></ul>
+      </section>
+
+      <div class="cantine__cta">
+        <a class="btn btn--pieno" href="https://wa.me/393351618047?text=Buonasera%2C%20vorrei%20prenotare%20un%20tavolo%20da%20Be%20Wine%20per%20" target="_blank" rel="noopener">Prenota un tavolo</a>
+      </div>
+    </div>
+  </main>
+
+  <!-- Barra rapida: compare quando la testata esce dallo schermo (js/sito.js). In alto su computer, in basso su telefono. -->
+  <div class="dock" data-dock>
+    <a class="dock__brand" href="index.html"><img src="img/logo-scuro.png" alt="Be Wine" width="776" height="254"></a>
+    <div class="dock__actions">
+      <a class="dock__link" href="index.html">Home</a>
+      <a class="dock__link" href="enoteca.html">L'enoteca</a>
+      <a class="dock__link" href="birre-distillati.html">Birre e distillati</a>
+      <a class="dock__call" href="tel:+393351618047"><span class="dock__call-long">335 161 8047</span><span class="dock__call-short">Chiama</span></a>
+      <a class="btn btn--pieno dock__cta" href="https://wa.me/393351618047?text=Buonasera%2C%20vorrei%20prenotare%20un%20tavolo%20da%20Be%20Wine%20per%20" target="_blank" rel="noopener">Prenota un tavolo</a>
+    </div>
+  </div>
+
+  <footer class="footer">
+    <div class="footer__grid">
+      <div class="footer__brand">
+        <img src="img/logo.png" alt="Be Wine" width="776" height="254" loading="lazy">
+        <p>Vineria ed enoteca a Montesilvano Marina, dal 2015.</p>
+      </div>
+      <div>
+        <p class="footer__label">Dove siamo</p>
+        <p>Corso Umberto I, 423<br>65015 Montesilvano (PE)</p>
+        <a class="footer__link footer__link--big" href="https://www.google.com/maps/dir/?api=1&amp;destination=Be%20Wine%2C%20Corso%20Umberto%20I%20423%2C%20Montesilvano" target="_blank" rel="noopener">Indicazioni</a>
+      </div>
+      <div>
+        <p class="footer__label">Orari</p>
+        <p>Martedì – venerdì 17–24<br>Sabato 18–24<br>Domenica e lunedì chiuso</p>
+      </div>
+      <div>
+        <p class="footer__label">Contatti</p>
+        <a class="btn btn--solid footer__cta" href="https://wa.me/393351618047?text=Buonasera%2C%20vorrei%20prenotare%20un%20tavolo%20da%20Be%20Wine%20per%20" target="_blank" rel="noopener">Prenota un tavolo</a>
+        <p><a class="footer__link footer__link--big" href="tel:+393351618047">Chiama 335 161 8047</a></p>
+        <p><a class="footer__link" href="https://www.facebook.com/BeWinePescara/" target="_blank" rel="noopener">Facebook</a> · <a class="footer__link" href="https://www.instagram.com/bewinemontesilvano/" target="_blank" rel="noopener">Instagram</a></p>
+      </div>
+    </div>
+    <div class="footer__legal">
+      <p>© 2026 Be Wine · P. IVA da inserire</p>
+      <nav aria-label="Note legali">
+        <a class="footer__link" href="#privacy">Informativa privacy</a>
+        <a class="footer__link" href="#cookie">Cookie policy</a>
+      </nav>
+    </div>
+  </footer>
+
+<script src="js/sito.js?v=29"></script>
+<script src="js/prodotti.js?v=30"></script>
+<script src="js/birre-distillati.js?v=1"></script>
+<script src="js/prenota.js?v=3"></script>
+</body>
+</html>
