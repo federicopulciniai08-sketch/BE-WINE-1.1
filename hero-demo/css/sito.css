@@ -1166,21 +1166,28 @@ html:has(.page-head--light), html:has(.page-head--light) body { background: var(
   .bar .nav li .nav__link.nav__link--cta { min-height: 44px; padding: 0 14px; }
   /* con Prenota a capsula la barra del telefono è più piena: logo un filo più piccolo e voci più vicine */
   .grande .hero .bar .brand img, .page-head--light .brand img { height: 30px; }
-  /* Menu a quattro voci (10 novembre 2026): su telefono non sta più su una riga.
-     Logo e Prenota restano sopra, L'enoteca e Birre e distillati vanno su una riga loro, sotto.
+  /* Menu a quattro voci (11 novembre 2026): su telefono non sta su una riga col logo.
+     Il logo sta da solo sopra; sotto, L'enoteca, Birre e distillati e Prenota su una riga sola,
+     centrati sulla stessa linea, Prenota in fondo a destra.
      Home non compare: ci porta già il logo. Vale per la home e per le pagine interne. */
   .hero .bar, .page-head--light .bar { position: relative; flex-wrap: wrap; row-gap: 0; }
   .hero .bar .brand, .page-head--light .bar .brand { display: flex; align-items: center; min-height: 44px; }
   .hero .bar .bar__end { width: 100%; }
-  .grande .hero .bar .nav, .page-head--light .bar .nav { width: 100%; justify-content: flex-start; gap: var(--u3); }
+  .grande .hero .bar .nav, .page-head--light .bar .nav { width: 100%; justify-content: space-between; align-items: center; gap: var(--u2); }
+  /* tre voci su una riga: scritte un filo più piccole e mai a capo */
+  .grande .hero .bar .nav li .nav__link, .page-head--light .bar .nav li .nav__link { font-size: 13px; letter-spacing: .04em; white-space: nowrap; }
   .page-head--light .nav li:first-child { display: none; }
-  .bar .nav li:last-child { position: absolute; top: 0; right: 0; }
-  .hero .bar .nav li:last-child { top: var(--u2); right: var(--u3); }
 }
 
 @media (max-width: 380px) {
   .hero .bar .nav li .nav__link, .page-head .bar .nav li .nav__link { letter-spacing: .04em; }
   .bar .nav li .nav__link.nav__link--cta { padding: 0 12px; }
+}
+@media (max-width: 359px) {
+  /* telefoni piccolissimi: la riga del menu si stringe ancora per starci */
+  .grande .hero .bar .nav, .page-head--light .bar .nav { gap: var(--u1); }
+  .grande .hero .bar .nav li .nav__link, .page-head--light .bar .nav li .nav__link { font-size: 12px; letter-spacing: .02em; }
+  .bar .nav li .nav__link.nav__link--cta { padding: 0 10px; }
 }
 
 /* Tasto pieno vino (anche nel modulo Prenota) */
