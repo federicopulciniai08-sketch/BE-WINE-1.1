@@ -744,6 +744,30 @@ main { background: var(--cream); color: var(--text); }
 .atlas__head { display: flex; align-items: baseline; justify-content: space-between; gap: var(--u3); margin-bottom: var(--u3); }
 .atlas__head .label { margin: 0; }
 .atlas__list { list-style: none; border-top: 1px solid var(--line); }
+.atlas__list[hidden] { display: none; }
+/* tasto "Vedi tutte" sotto le prime 4 cantine */
+.atlas__toggle {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--u2);
+  width: 100%;
+  min-height: 64px;
+  padding: 0;
+  border: 0;
+  border: 0; /* sopra c'è già la riga dell'ultima cantina */
+  background: none;
+  font: 700 var(--t1)/1 var(--sans);
+  letter-spacing: .13em;
+  text-transform: uppercase;
+  color: var(--text);
+  cursor: pointer;
+}
+.atlas__toggle[hidden] { display: none; }
+.atlas__toggle svg { width: 20px; height: 20px; fill: none; stroke: currentColor; stroke-width: 1.6; transition: transform 300ms var(--ease-out); }
+.atlas__toggle[aria-expanded="true"] svg { transform: rotate(180deg); }
+@media (hover: hover) and (pointer: fine) { .atlas__toggle:hover { color: var(--wine-deep); } }
+.atlas__toggle:focus-visible { outline: 2px solid var(--text); outline-offset: 4px; }
 .card {
   display: block;
   width: 100%;

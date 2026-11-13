@@ -10,7 +10,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@500;700&family=Instrument+Serif&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="css/sito.css?v=60">
+<link rel="stylesheet" href="css/sito.css?v=63">
 </head>
 <body>
   <header class="page-head page-head--light">
@@ -50,7 +50,11 @@
             <p class="label" data-conteggio></p>
           </div>
           <button class="text-link atlas__reset" type="button" data-tutte hidden>Tutte le cantine</button>
-          <ul class="atlas__list" data-elenco></ul>
+          <ul class="atlas__list" id="elenco-cantine" data-elenco></ul>
+          <button class="atlas__toggle" type="button" aria-expanded="false" aria-controls="elenco-cantine" data-apri-elenco>
+            <span data-apri-testo>Vedi tutte</span>
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg>
+          </button>
         </div>
       </div>
 
@@ -119,7 +123,7 @@
 <script src="js/sito.js?v=30"></script>
 <script src="js/prodotti.js?v=30"></script>
 <script src="js/cantine.js?v=29"></script>
-<script src="js/enoteca.js?v=30"></script>
+<script src="js/enoteca.js?v=33"></script>
 <script src="js/prenota.js?v=3"></script>
 </body>
 </html>

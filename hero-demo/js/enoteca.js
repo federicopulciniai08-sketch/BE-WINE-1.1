@@ -67,8 +67,31 @@
   }
 
   // ---------- Mappe: si caricano da img/mappe/ solo quando servono ----------
+  // Aperta dal file (file://) fetch non funziona: le mappe arrivano da js/mappe.js (strumenti/mappe-js.py).
   var caricate = {};
+  var mappeLocali = null;
+  function daFile(percorso) {
+    if (!mappeLocali) {
+      mappeLocali = new Promise(function (ok, no) {
+        if (window.MAPPE_SVG) return ok();
+        var s = document.createElement("script");
+        s.src = "js/mappe.js";
+        s.onload = ok;
+        s.onerror = function () { mappeLocali = null; no(new Error("js/mappe.js non trovato")); };
+        document.head.appendChild(s);
+      });
+    }
+    return mappeLocali.then(function () {
+      var testo = window.MAPPE_SVG && window.MAPPE_SVG[percorso];
+      if (!testo) throw new Error("Mappa non trovata: " + percorso);
+      return testo;
+    });
+  }
   function carica(id) {
+    if (!caricate[id] && location.protocol === "file:") {
+      caricate[id] = daFile(REGIONI[id].mappa);
+      caricate[id].catch(function () { delete caricate[id]; });
+    }
     if (!caricate[id]) {
       caricate[id] = fetch(REGIONI[id].mappa).then(function (r) {
         if (!r.ok) throw new Error("Mappa non trovata: " + REGIONI[id].mappa);
@@ -335,7 +358,23 @@
   });
   tutte.addEventListener("click", function () { stato.comune = null; disegna(); });
 
-  function disegna() {
+  // L'elenco mostra le prime 4 cantine; il tasto "Vedi tutte" apre le altre ("Mostra meno" le richiude).
+  // Toccando un segnaposto restano le sole cantine di quel comune, tutte.
+  var PRIME = 4;
+  var apriElenco = document.querySelector("[data-apri-elenco]");
+  var apriTesto = document.querySelector("[data-apri-testo]");
+  var elencoAperto = false;
+  apriElenco.addEventListener("click", function () {
+    elencoAperto = !elencoAperto;
+    var giaVisibili = elencoAperto ? PRIME : 0;
+    disegna(giaVisibili);
+    // richiudendo, se il tasto è finito sopra lo schermo lo si riporta in vista
+    if (!elencoAperto && apriElenco.getBoundingClientRect().top < 0) apriElenco.scrollIntoView({ block: "center" });
+  });
+
+  // salta: quante cantine in cima erano già sullo schermo (non rifanno l'entrata)
+  function disegna(salta) {
+    salta = salta || 0;
     tipiBox.querySelectorAll(".filter").forEach(function (b) { b.setAttribute("aria-pressed", String(b.dataset.v === stato.tipo)); });
 
     // sulla mappa restano solo i segnaposti con vini del tipo scelto
@@ -352,6 +391,11 @@
     titolo.textContent = stato.comune || REGIONI[stato.regione].nome;
     tutte.hidden = !stato.comune;
     conteggio.textContent = lista.length + (lista.length === 1 ? " cantina" : " cantine");
+    var tutteVisibili = elencoAperto || !!stato.comune || lista.length <= PRIME;
+    apriElenco.hidden = !!stato.comune || lista.length <= PRIME;
+    apriElenco.setAttribute("aria-expanded", String(elencoAperto));
+    apriTesto.textContent = elencoAperto ? "Mostra meno" : "Vedi tutte";
+    if (!tutteVisibili) lista = lista.slice(0, PRIME);
     elenco.textContent = "";
     if (!CANT.some(function (c) { return c.regione === stato.regione; })) {
       var vuoto = document.createElement("li");
@@ -378,8 +422,10 @@
       bottone.addEventListener("pointerenter", function () { accendi(puntoDi(c)); });
       bottone.addEventListener("pointerleave", function () { accendi(null); });
       // a ogni cambio di filtro le cantine rientrano una dopo l'altra (al massimo 240 ms di attesa)
-      li.className = "is-entering";
-      li.style.setProperty("--i", Math.min(i, 6));
+      if (i >= salta) {
+        li.className = "is-entering";
+        li.style.setProperty("--i", Math.min(i - salta, 6));
+      }
       elenco.appendChild(li);
     });
   }

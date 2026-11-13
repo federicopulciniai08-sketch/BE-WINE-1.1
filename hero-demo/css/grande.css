@@ -5,7 +5,7 @@
   --t1: 15px;   /* menu, etichette, bottoni */
   --t2: 28px;   /* testi */
   --t4: 88px;   /* titoli delle sezioni */
-  --hero-title: clamp(56px, 9.8vw, 176px); /* 141 px a 1440, come il riferimento */
+  --hero-title: clamp(51px, 8.9vw, 160px); /* 128 px a 1440, un po' sotto il riferimento */
   --indent: 14vw;                          /* il titolo parte rientrato, non al centro */
 }
 
@@ -101,6 +101,15 @@
 .scroll:focus-visible { outline: 2px solid var(--ink); outline-offset: 6px; border-radius: 50%; }
 @media (prefers-reduced-motion: reduce) { .scroll__ring { transition: none; } }
 
+/* Il titolo ora è "Vini d'Abruzzo, e non solo.": la riga più lunga misura circa 6,2 volte il corpo del titolo.
+   Il cerchio parte dopo la fine di quella riga, così non la tocca mai. */
+.grande .scroll { left: calc(var(--indent) - var(--u4) + var(--hero-title) * 6.3 + var(--u3)); }
+@media (min-width: 761px) and (max-width: 1000px) {
+  /* tablet: il titolo occupa quasi tutta la larghezza, il cerchio va sotto, a destra, come sul telefono */
+  .grande .scroll { position: relative; top: auto; left: auto; align-self: flex-end; width: 112px; height: 112px; margin: var(--u4) 6% 0 0; }
+  .grande .scroll__text { font-size: 12px; margin-top: -18px; }
+}
+
 /* ---------- Sotto la hero: tutto più grande e più largo ---------- */
 .grande .section { padding: calc(var(--u5) * 1.5) var(--u4); }
 .grande .title {
@@ -137,7 +146,7 @@
     --t1: 13px;
     --t2: 21px;
     --t4: 44px;
-    --hero-title: 14.4vw; /* "Montesilvano." sta su una riga a 390 px */
+    --hero-title: 14.1vw; /* "Vini d'Abruzzo," occupa circa il 69% della larghezza */
     --indent: 0px;
   }
   .grande .hero { padding-bottom: var(--u4); }
