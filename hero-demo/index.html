@@ -10,9 +10,9 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@500;700&family=Fraunces:opsz,wght@9..144,300..500&family=Instrument+Serif&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="css/sito.css?v=63">
+<link rel="stylesheet" href="css/sito.css?v=69">
 <!-- Prova: più vicina al riferimento (Agence Van den Abeele), scritte più grandi e larghe -->
-<link rel="stylesheet" href="css/grande.css?v=14">
+<link rel="stylesheet" href="css/grande.css?v=18">
 </head>
 <body class="grande">
   <header class="hero">
@@ -39,14 +39,35 @@
 
   <main>
     <section class="section about" id="chi-siamo" aria-labelledby="about-title">
-      <figure class="about__photo">
-        <img src="img/chi-siamo-locale.jpg?v=2" alt="Una botte di legno in primo piano e, dietro, i tavoli della sala sotto gli archi rossi" width="830" height="1030" loading="lazy">
-      </figure>
-      <div class="about__text">
-        <p class="label">Chi siamo</p>
-        <h2 class="title" id="about-title">Be Wine <span class="fact">dal 2015.</span></h2>
-        <p class="lead">Be Wine apre nel 2015 sul corso di Montesilvano Marina. È un'enoteca dove scegliere una bottiglia da portare a casa e una vineria dove berla con calma, al banco o ai tavoli all'aperto. Sugli scaffali ci sono vini, birre e distillati scelti da tutta Italia: rossi, bianchi e bollicine, ma anche rum, whisky, gin e grappe, e c'è il vino alla spina. Al banco trovate Fabio: se non sapete cosa prendere, vi chiede cosa vi piace e vi consiglia. Si entra per un calice, spesso si resta per la serata.</p>
-        <div class="cta-row">
+      <div class="about__inner">
+        <h2 class="title about__title" id="about-title">Chi siamo<span class="fact">.</span></h2>
+        <!-- Testi provvisori (60 parole in tutto): da concordare con Fabio -->
+        <p class="about__intro">Siamo un'enoteca e una vineria: la bottiglia puoi portarla a casa o aprirla qui, al banco o ai tavoli fuori.</p>
+        <!-- una parola grande, una frase breve e una foto piccola inclinata per voce -->
+        <ul class="about__list">
+          <li class="about__item is-active">
+            <figure class="about__photo about__photo--sala">
+              <img src="img/chi-siamo-sala.jpg" alt="La sala con i tavoli chiari sotto gli archi rossi e i quadri alle pareti" width="1200" height="800" loading="lazy">
+            </figure>
+            <p class="about__word">2015<span class="fact">.</span></p>
+            <p class="about__note">Abbiamo aperto sul corso di Montesilvano Marina.</p>
+          </li>
+          <li class="about__item">
+            <figure class="about__photo about__photo--scaffale">
+              <img src="img/chi-siamo-scaffale.jpg" alt="Bottiglie di rosso e di rosato in fila su uno scaffale nero" width="700" height="700" loading="lazy">
+            </figure>
+            <p class="about__word">Abruzzo<span class="fact">.</span></p>
+            <p class="about__note">Teniamo soprattutto vini abruzzesi, poi qualcosa dal resto d'Italia, birre e distillati.</p>
+          </li>
+          <li class="about__item">
+            <figure class="about__photo about__photo--rosato">
+              <img src="img/chi-siamo-rosato.jpg" alt="Una bottiglia di rosato tenuta da un elefante di legno, davanti alla parete rossa" width="640" height="800" loading="lazy">
+            </figure>
+            <p class="about__word">Fabio<span class="fact">.</span></p>
+            <p class="about__note">Se non sai cosa prendere chiedi a lui: ti domanda cosa bevi di solito e parte da lì.</p>
+          </li>
+        </ul>
+        <div class="cta-row about__cta">
           <a class="btn btn--dark" href="enoteca.html">Scopri i vini</a>
         </div>
       </div>
@@ -125,7 +146,7 @@
   </footer>
 
 <script src="js/sito.js?v=30"></script>
-<script src="js/grande.js?v=4"></script>
+<script src="js/grande.js?v=6"></script>
 <script src="js/prenota.js?v=3"></script>
 </body>
 </html>

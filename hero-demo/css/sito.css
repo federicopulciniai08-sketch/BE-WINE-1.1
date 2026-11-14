@@ -226,23 +226,85 @@ main { background: var(--cream); color: var(--text); }
   font-weight: 500;
 }
 
-/* Chi siamo: foto a lato, testo accanto */
-.about {
+/* Chi siamo: struttura presa dal riferimento (Agence Van den Abeele, sotto la hero).
+   Niente titolo a lato: un paragrafo in alto, poi tre voci, ognuna con una parola grande,
+   una frase breve e una foto piccola inclinata con un cartoncino chiaro dietro. Tasto al centro. */
+.about { max-width: 1440px; margin: 0 auto; }
+.about__inner { max-width: 1000px; margin: 0 auto; }
+/* titolo della sezione alla misura degli altri titoli (88 px su computer, 44 su telefono) */
+.about__title { margin-bottom: var(--u4); }
+.about__intro {
+  max-width: 30em;
+  font-size: var(--t2);
+  line-height: 1.45;
+  font-weight: 500;
+}
+.about__list { list-style: none; margin: var(--u5) 0; }
+.about__item {
+  position: relative;
   display: grid;
-  grid-template-columns: 5fr 6fr;
-  gap: var(--u5);
+  /* foto, parola, frase: colonne uguali in tutte le voci, anche se la parola è più larga */
+  grid-template-columns: minmax(0, 26fr) minmax(0, 34fr) minmax(0, 40fr);
+  column-gap: var(--u4);
   align-items: center;
-  max-width: 1440px;
-  margin: 0 auto;
+  min-height: 184px;
 }
-.about__photo img {
-  display: block;
-  width: 100%;
-  height: auto;
-  aspect-ratio: 830 / 1030;
-  object-fit: cover;
+.about__word {
+  grid-column: 2;
+  justify-self: end; /* una parola lunga sporge a sinistra, verso la foto, mai sulla frase */
+  font-family: var(--serif);
+  font-size: clamp(56px, 6.4vw, 92px);
+  line-height: 1;
+  text-align: right;
+  white-space: nowrap;
+  transition: color 500ms var(--ease-out);
 }
-.about .lead { font-size: var(--t2); }
+.about__word .fact { color: var(--wine-deep); transition: color 500ms var(--ease-out); }
+.about__note {
+  grid-column: 3;
+  max-width: 22em;
+  font-size: 17px;
+  line-height: 1.6;
+  transition: opacity 500ms var(--ease-out);
+}
+/* la foto non allarga la riga: sta a sinistra, centrata sulla sua voce, e può sporgere sopra e sotto */
+.about__photo {
+  position: absolute;
+  left: 0;
+  top: 50%;
+  translate: 0 -50%;
+  rotate: -3deg;
+  transition: opacity 600ms var(--ease-out), scale 700ms var(--ease-out);
+}
+.about__photo::before { /* cartoncino chiaro dietro, girato dall'altra parte */
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background: var(--line);
+  rotate: 5deg;
+  translate: 10px 12px;
+}
+.about__photo img { display: block; width: 100%; height: auto; object-fit: cover; }
+.about__photo--sala { width: 27%; }
+.about__photo--sala img { aspect-ratio: 3 / 2; }
+.about__photo--scaffale { width: 20%; left: 1%; rotate: 2.5deg; }
+.about__photo--scaffale img { aspect-ratio: 1; }
+.about__photo--scaffale::before { rotate: -5deg; translate: -10px 12px; }
+.about__photo--rosato { width: 20%; left: 2%; rotate: -2deg; }
+.about__photo--rosato img { aspect-ratio: 4 / 5; }
+.about__cta { justify-content: center; margin-top: 0; }
+
+/* Su computer, con lo script acceso, una voce alla volta: le altre restano chiare e senza foto */
+@media (min-width: 761px) {
+  .about--live .about__item:not(.is-active) .about__word,
+  .about--live .about__item:not(.is-active) .about__word .fact { color: #ded4c5; }
+  .about--live .about__item:not(.is-active) .about__note { opacity: .3; }
+  .about--live .about__item:not(.is-active) .about__photo { opacity: 0; scale: .94; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .about__word, .about__word .fact, .about__note, .about__photo { transition: none; }
+}
 
 /* Recensioni */
 .reviews {
@@ -339,7 +401,19 @@ main { background: var(--cream); color: var(--text); }
     --logo: 36px;
   }
   .section { padding: var(--u5) var(--u3); }
-  .about { grid-template-columns: 1fr; gap: var(--u4); }
+  /* Chi siamo su telefono: parola a sinistra, fotina a destra sulla stessa riga, frase sotto. Tutte le voci accese. */
+  .about__list { margin: var(--u4) 0; }
+  .about__title { margin-bottom: var(--u3); }
+  .about__item { grid-template-columns: 1fr auto; column-gap: var(--u3); row-gap: var(--u3); align-items: end; min-height: 0; }
+  .about__item + .about__item { margin-top: var(--u4); }
+  .about__word { grid-column: 1; grid-row: 1; justify-self: start; font-size: 54px; text-align: left; }
+  .about__note { grid-column: 1 / -1; grid-row: 2; max-width: none; font-size: 16px; }
+  .about__photo { position: relative; left: auto; top: auto; translate: none; grid-column: 2; grid-row: 1; margin-right: var(--u2); }
+  .about__photo::before { translate: 6px 7px; }
+  .about__photo--sala { width: 108px; }
+  .about__photo--scaffale { width: 78px; left: auto; }
+  .about__photo--scaffale::before { translate: -6px 7px; }
+  .about__photo--rosato { width: 70px; left: auto; }
   .footer { padding: var(--u5) var(--u3) var(--u4); }
   .footer__grid { grid-template-columns: 1fr; }
   .hero { padding: var(--u3) var(--u3) var(--u4); }

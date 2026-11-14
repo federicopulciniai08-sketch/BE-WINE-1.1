@@ -1,65 +1,45 @@
-// Chi siamo: entrata quando la sezione arriva sullo schermo e foto che si muove
-// appena allo scorrere. Con "riduci movimento" non parte niente e tutto resta fermo.
+// Chi siamo: entrata quando la sezione arriva sullo schermo (titolo, paragrafo, poi le tre voci).
+// Con "riduci movimento" l'entrata non parte e tutto resta fermo.
+// Su computer resta accesa una voce alla volta: quella più vicina al centro dello schermo,
+// oppure quella su cui passa il puntatore. Le altre si schiariscono (regole in sito.css).
 (function () {
   var section = document.querySelector(".about");
-  if (!section || !("IntersectionObserver" in window)) return;
-  if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+  if (!section) return;
 
-  // titolo diviso in parole, il colore vino resta sulla sua parte
-  var title = section.querySelector(".title");
-  var i = 0;
-  function split(node) {
-    Array.prototype.slice.call(node.childNodes).forEach(function (child) {
-      if (child.nodeType === 3) {
-        var frag = document.createDocumentFragment();
-        child.textContent.split(/(\s+)/).forEach(function (part) {
-          if (!part) return;
-          if (/^\s+$/.test(part)) { frag.appendChild(document.createTextNode(part)); return; }
-          var w = document.createElement("span");
-          w.className = "w";
-          var inner = document.createElement("span");
-          inner.style.setProperty("--i", i++);
-          inner.textContent = part;
-          w.appendChild(inner);
-          frag.appendChild(w);
-        });
-        node.replaceChild(frag, child);
-      } else if (child.nodeType === 1) {
-        split(child);
-      }
-    });
-  }
-  if (title) {
-    title.setAttribute("aria-label", title.textContent);
-    split(title);
-    title.querySelectorAll(".w").forEach(function (w) { w.setAttribute("aria-hidden", "true"); });
+  if ("IntersectionObserver" in window && !window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+    section.classList.add("anim");
+    var io = new IntersectionObserver(function (entries) {
+      entries.forEach(function (e) {
+        if (e.isIntersecting) { section.classList.add("is-in"); io.disconnect(); }
+      });
+    }, { rootMargin: "0px 0px -20% 0px" }); // parte quando la sezione supera l'ultimo quinto dello schermo
+    io.observe(section);
   }
 
-  section.classList.add("anim");
-  var io = new IntersectionObserver(function (entries) {
-    entries.forEach(function (e) {
-      if (e.isIntersecting) { section.classList.add("is-in"); io.disconnect(); }
-    });
-  }, { rootMargin: "0px 0px -20% 0px" }); // parte quando la sezione supera l'ultimo quinto dello schermo
-  io.observe(section);
+  var items = Array.prototype.slice.call(section.querySelectorAll(".about__item"));
+  if (!items.length) return;
+  section.classList.add("about--live");
 
-  // la foto scorre un poco più lenta della pagina
-  var photo = section.querySelector(".about__photo img");
+  function activate(item) {
+    items.forEach(function (it) { it.classList.toggle("is-active", it === item); });
+  }
   var ticking = false;
-  function move() {
+  function pick() {
     ticking = false;
-    var r = section.getBoundingClientRect();
-    var vh = window.innerHeight;
-    if (r.bottom < 0 || r.top > vh) return;
-    var progress = (vh - r.top) / (vh + r.height); // 0 entra, 1 esce
-    photo.style.setProperty("--py", ((progress - .5) * -48).toFixed(1) + "px");
+    var mid = window.innerHeight / 2;
+    var best = items[0], gap = Infinity;
+    items.forEach(function (it) {
+      var r = it.getBoundingClientRect();
+      var d = Math.abs(r.top + r.height / 2 - mid);
+      if (d < gap) { gap = d; best = it; }
+    });
+    activate(best);
   }
-  if (photo) {
-    window.addEventListener("scroll", function () {
-      if (!ticking) { ticking = true; requestAnimationFrame(move); }
-    }, { passive: true });
-    move();
-  }
+  function ask() { if (!ticking) { ticking = true; requestAnimationFrame(pick); } }
+  window.addEventListener("scroll", ask, { passive: true });
+  window.addEventListener("resize", ask);
+  items.forEach(function (it) { it.addEventListener("mouseenter", function () { activate(it); }); });
+  pick();
 })();
 
 // "Scopri chi siamo": la pagina scende da sola fino a Chi siamo, parte di scatto
