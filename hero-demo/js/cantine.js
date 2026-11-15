@@ -51,7 +51,7 @@ window.CANTINE_ENOTECA = [
     regione: "abruzzo",
     soprannome: "Il bianco",
     nome: "Aimè",
-    zona: "Abruzzo · cantina da confermare",
+    zona: "Abruzzo", // cantina da confermare col titolare
     testo: "Pecorino d'Abruzzo: il bianco del territorio, fresco e profumato.",
     bottiglie: ["aime"]
   },
@@ -69,7 +69,7 @@ window.CANTINE_ENOTECA = [
     regione: "veneto",
     soprannome: "Alla spina",
     nome: "Rosato frizzante",
-    zona: "Veneto · cantina da confermare",
+    zona: "Veneto", // cantina da confermare col titolare
     testo: "Il rosato frizzante che esce dalle spine di rame del bancone. Si beve al banco o si porta via.",
     bottiglie: ["rosato-spina"]
   },
@@ -106,7 +106,7 @@ window.CANTINE_ENOTECA = [
     regione: "abruzzo",
     soprannome: "Colline Teramane",
     nome: "Biagi",
-    zona: "Colline Teramane (TE) · comune da confermare",
+    zona: "Colline Teramane (TE)", // comune da confermare col titolare
     testo: "Ipnosi è un Montepulciano Colline Teramane DOCG, affinato a lungo in piccole botti di rovere.",
     bottiglie: ["ipnosi"]
   },

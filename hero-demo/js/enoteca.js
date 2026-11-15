@@ -397,12 +397,6 @@
     apriTesto.textContent = elencoAperto ? "Mostra meno" : "Vedi tutte";
     if (!tutteVisibili) lista = lista.slice(0, PRIME);
     elenco.textContent = "";
-    if (!CANT.some(function (c) { return c.regione === stato.regione; })) {
-      var vuoto = document.createElement("li");
-      vuoto.className = "draft-note atlas__empty";
-      vuoto.textContent = "Cantine " + (REGIONI[stato.regione].nome === "Veneto" ? "del Veneto" : "di questa regione") + " da inserire: nomi e comuni da chiedere al titolare.";
-      elenco.appendChild(vuoto);
-    }
     lista.forEach(function (c, i) {
       // nell'elenco al massimo tre foto; le bottiglie senza foto non compaiono qui, solo nella scheda
       var foto = c.bottiglie.filter(function (id) { return PROD[id].foto; }).slice(0, 3).map(function (id) {

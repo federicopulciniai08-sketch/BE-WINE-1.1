@@ -6,11 +6,11 @@
 <!-- Demo in attesa di conferma del titolare: fuori dai motori di ricerca -->
 <meta name="robots" content="noindex, nofollow">
 <title>Birre e distillati · Be Wine, Montesilvano</title>
-<meta name="description" content="Gin, rum, whisky, amari e birre in bottiglia da Be Wine, a Montesilvano Marina.">
+<meta name="description" content="Birre bionde, bianche, rosse, scure, weisse e artigianali, gin, rum, whisky e amari da Be Wine, a Montesilvano Marina.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@500;700&family=Instrument+Serif&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="css/sito.css?v=63">
+<link rel="stylesheet" href="css/sito.css?v=72">
 </head>
 <body>
   <header class="page-head page-head--light">
@@ -32,9 +32,7 @@
 
   <main>
     <div class="section bd">
-      <p class="draft-note">Bottiglie prese dalle foto del fotografo, birre provvisorie: elenco da confermare col titolare.</p>
-
-      <!-- Due schede: se ne vede una alla volta. Quella aperta si legge dall'indirizzo (#distillati, #birre). -->
+      <!-- Due schede: se ne vede una alla volta. Quella aperta si legge dall'indirizzo (#distillati, #birre); senza indirizzo si apre Distillati. -->
       <div class="switch" role="tablist" aria-label="Distillati o birre">
         <a class="nav__link switch__tab" role="tab" id="tab-distillati" href="#distillati" data-tab="distillati" aria-controls="scheda-distillati" aria-selected="true">Distillati</a>
         <a class="nav__link switch__tab" role="tab" id="tab-birre" href="#birre" data-tab="birre" aria-controls="scheda-birre" aria-selected="false" tabindex="-1">Birre</a>
@@ -48,7 +46,7 @@
         </div>
         <div class="bd__block" data-blocco>
           <div class="bd__head">
-            <h2 class="label">Scaffale</h2>
+            <h2 class="visually-hidden">Scaffale</h2>
             <div class="filters" role="group" aria-label="Tipo di distillato" data-filtri></div>
           </div>
           <ul class="grid grid--products grid--small" data-scaffale></ul>
@@ -59,8 +57,9 @@
         </div>
       </section>
 
+      <!-- Birre: niente marche, una riga per tipo (nome e frase), dall'elenco BIRRE -->
       <section class="panel" role="tabpanel" id="scheda-birre" aria-labelledby="tab-birre" data-pannello="birre" hidden>
-        <ul class="rows" data-birre></ul>
+        <ul class="rows rows--birre" data-birre></ul>
       </section>
 
       <div class="cantine__cta">
@@ -104,7 +103,7 @@
       </div>
     </div>
     <div class="footer__legal">
-      <p>© 2026 Be Wine · P. IVA da inserire</p>
+      <p>© 2026 Be Wine</p>
       <nav aria-label="Note legali">
         <a class="footer__link" href="#privacy">Informativa privacy</a>
         <a class="footer__link" href="#cookie">Cookie policy</a>
@@ -113,8 +112,8 @@
   </footer>
 
 <script src="js/sito.js?v=30"></script>
-<script src="js/prodotti.js?v=30"></script>
-<script src="js/birre-distillati.js?v=1"></script>
+<script src="js/prodotti.js?v=34"></script>
+<script src="js/birre-distillati.js?v=5"></script>
 <script src="js/prenota.js?v=3"></script>
 </body>
 </html>

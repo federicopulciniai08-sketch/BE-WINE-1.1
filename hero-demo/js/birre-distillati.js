@@ -1,5 +1,5 @@
-// Pagina Birre e distillati: due schede (Distillati, Birre) disegnate dai dati di js/prodotti.js.
-// Per aggiungere una bottiglia, una birra o un cocktail basta una riga in prodotti.js: qui non si tocca niente.
+// Pagina Birre e distillati: due schede (Birre, Distillati) disegnate dai dati di js/prodotti.js.
+// Per aggiungere una bottiglia, un tipo di birra o un cocktail basta una riga in prodotti.js: qui non si tocca niente.
 (function () {
   "use strict";
   var PRODOTTI = window.PRODOTTI || [];
@@ -113,22 +113,17 @@
   });
 
   // ================= Scheda Birre =================
-  // Lista scritta: birrificio, nome, stile, formato. Il campo "foto" c'è già nei dati ma qui non si usa ancora.
+  // Niente marche: una riga per tipo, nome a sinistra (col punto color vino, come i titoli del sito) e frase a destra.
+  // L'elenco è BIRRE in prodotti.js.
   var birreBox = document.querySelector("[data-birre]");
   birreBox.textContent = "";
-  della("birre").forEach(function (p) {
+  (window.BIRRE || []).forEach(function (b) {
     var li = crea("li", "row");
-    var sx = crea("span", "row__main");
-    if (p.birrificio || p.daConfermare) {
-      var sopra = crea("span", "tile__nick", p.birrificio || "");
-      if (p.daConfermare) sopra.appendChild(crea("span", "row__flag", (p.birrificio ? " · " : "") + "da confermare"));
-      sx.appendChild(sopra);
-    }
-    sx.appendChild(crea("span", "row__name", p.nome));
-    li.appendChild(sx);
-    var dx = crea("span", "row__metas");
-    if (p.stile) dx.appendChild(crea("span", "row__meta", p.stile));
-    if (p.formato) dx.appendChild(crea("span", "row__meta", p.formato));
+    var nome = crea("span", "row__name", b.nome);
+    nome.appendChild(crea("span", "fact", "."));
+    li.appendChild(nome);
+    var dx = crea("span", "row__side");
+    if (b.frase) dx.appendChild(crea("span", "row__text", b.frase));
     li.appendChild(dx);
     birreBox.appendChild(li);
   });

@@ -1473,11 +1473,11 @@ html:has(.page-head--light), html:has(.page-head--light) body { background: var(
 .bd__head { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 0 var(--u4); margin-bottom: var(--u3); }
 .bd__head .label, .bd__head .filters { margin-bottom: 0; }
 
-/* I più richiesti: foto grande e nome a 48 px, due per riga */
+/* I più richiesti: due per riga, foto larga 200 px e nome a 36 px (rimpiccioliti il 15 novembre 2026) */
 .feature { list-style: none; display: grid; grid-template-columns: repeat(2, 1fr); gap: var(--u4) var(--u3); }
-.feature__item { display: grid; grid-template-columns: 7fr 5fr; gap: var(--u3); align-items: end; }
+.feature__item { display: grid; grid-template-columns: 200px 1fr; gap: var(--u3); align-items: end; }
 .feature__photo { margin-bottom: 0; }
-.feature__name { margin-top: var(--u1); font: 400 var(--t4)/1.05 var(--serif); letter-spacing: -.005em; }
+.feature__name { margin-top: var(--u1); font: 400 36px/1.05 var(--serif); letter-spacing: -.005em; }
 @media (hover: hover) and (pointer: fine) {
   .feature__item:hover .feature__photo img { transform: scale(1.04); }
 }
@@ -1485,7 +1485,7 @@ html:has(.page-head--light), html:has(.page-head--light) body { background: var(
 /* Scaffale: le bottiglie rientrano una dopo l'altra a ogni cambio di filtro */
 .grid--products li.is-entering { animation: card-in 380ms cubic-bezier(.16, 1, .3, 1) calc(var(--i) * 40ms) both; }
 
-/* Liste scritte, senza foto: birre (nome, birrificio, stile, formato) e cocktail (nome, ingredienti) */
+/* Liste scritte, senza foto: birre (tipo e frase) e cocktail (nome, ingredienti) */
 .rows { list-style: none; border-top: 1px solid var(--line); }
 .row { display: grid; grid-template-columns: 1fr 1fr; gap: var(--u2) var(--u3); align-items: end; padding: var(--u3) 0; border-bottom: 1px solid var(--line); }
 /* l'ultima riga non ha il filo: sotto c'è già quello del tasto Prenota */
@@ -1499,9 +1499,12 @@ html:has(.page-head--light), html:has(.page-head--light) body { background: var(
 .row__meta { font: 700 var(--t1)/1.8 var(--sans); letter-spacing: .13em; text-transform: uppercase; color: var(--muted); }
 .row__side { display: block; }
 .row__text { display: block; margin-bottom: var(--u1); font-size: var(--t2); line-height: 1.4; font-weight: 500; }
+/* Birre: il punto dopo il nome è color vino, come nei titoli. Nessun effetto al passaggio del puntatore. */
+.row__name .fact { color: var(--wine-deep); }
 
 @media (max-width: 1000px) {
-  .feature__item { grid-template-columns: 1fr; }
+  .feature__item { grid-template-columns: 140px 1fr; }
+  .feature__name { font-size: 28px; }
 }
 @media (max-width: 760px) {
   .switch { gap: var(--u3); margin-bottom: var(--u3); }

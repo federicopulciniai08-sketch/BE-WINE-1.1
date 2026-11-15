@@ -1,11 +1,10 @@
 // Prodotti di prova: nomi letti dalle foto del fotografo, da confermare col titolare.
-// sezione: vini | birre | distillati · tipo: il filtro dentro la sezione
-// top: true = tra "I più richiesti" · daConfermare: true = riga provvisoria, la pagina lo scrive accanto
+// sezione: vini | distillati · tipo: il gruppo dentro la sezione
+// top: true = tra i più richiesti (la pagina lo scrive accanto e apre la foto di quella bottiglia)
 // Vini → pagina L'enoteca. Distillati, birre e cocktail → pagina Birre e distillati (js/birre-distillati.js):
-// lì per aggiungere una bottiglia, una birra o un cocktail basta una riga in questo file.
+// lì per aggiungere una bottiglia, un tipo di birra o un cocktail basta una riga in questo file.
 window.SEZIONI = {
   vini: { nome: "Vini", tipi: ["Bianchi", "Rossi", "Rosati", "Bollicine"] },
-  birre: { nome: "Birre", tipi: [] },
   distillati: { nome: "Distillati", tipi: ["Gin", "Rum", "Whisky", "Amari e liquori"] }
 };
 
@@ -56,11 +55,7 @@ window.PRODOTTI = [
   { id: "adami-prosecco", sezione: "vini", tipo: "Bollicine", nome: "Prosecco Superiore", cantina: "Valdobbiadene DOCG", zona: "Veneto", foto: "" },
   { id: "corvee-brut", sezione: "vini", tipo: "Bollicine", nome: "Corvée Brut", cantina: "Trento DOC", zona: "Trentino", foto: "" },
 
-  // Birre: poche, in bottiglia, niente spine. Sulla pagina sono una lista scritta: nome, birrificio, stile, formato.
-  // "foto" è già pronto per quando arriveranno le foto (file in img/prodotti/): oggi la pagina non lo usa.
-  // Menabrea e Peroni sono righe provvisorie: quali birre, stile e formato vanno chiesti al titolare.
-  { id: "menabrea", sezione: "birre", tipo: "", nome: "Menabrea", birrificio: "Birra Menabrea, Biella", stile: "Lager", formato: "Bottiglia 33 cl", foto: "", daConfermare: true },
-  { id: "peroni", sezione: "birre", tipo: "", nome: "Peroni", birrificio: "Birra Peroni, Roma", stile: "Lager", formato: "Bottiglia 33 cl", foto: "", daConfermare: true },
+  // Le birre non stanno qui: niente marche, solo i tipi (elenco BIRRE in fondo al file).
 
   // Distillati: "cantina" è il tipo scritto in etichetta, "zona" la provenienza
   { id: "tanqueray-ten", sezione: "distillati", tipo: "Gin", nome: "Tanqueray No. Ten", cantina: "London Dry Gin", zona: "Regno Unito", foto: "tanqueray-ten.jpg", top: true },
@@ -76,9 +71,22 @@ window.PRODOTTI = [
   { id: "oban", sezione: "distillati", tipo: "Whisky", nome: "Oban", cantina: "Single Malt Scotch Whisky", zona: "Scozia", foto: "oban.jpg" },
   { id: "vermouth-professore", sezione: "distillati", tipo: "Amari e liquori", nome: "Vermouth del Professore", cantina: "Vermouth di Torino", zona: "Piemonte", foto: "vermouth-professore.jpg" },
   { id: "italicus", sezione: "distillati", tipo: "Amari e liquori", nome: "Italicus", cantina: "Rosolio di bergamotto", zona: "", foto: "italicus.jpg" },
-  { id: "strozzapreti", sezione: "distillati", tipo: "Amari e liquori", nome: "Strozzapreti", cantina: "Tirabuccia · liquore", zona: "", foto: "strozzapreti.jpg" },
-  // Dalla pagina Facebook di Be Wine: vino aromatizzato, sta con amari e vermouth. Senza foto per ora.
-  { id: "barolo-chinato", sezione: "distillati", tipo: "Amari e liquori", nome: "Barolo Chinato", cantina: "Erbaluna", zona: "La Morra, Piemonte", foto: "" }
+  { id: "strozzapreti", sezione: "distillati", tipo: "Amari e liquori", nome: "Strozzapreti", cantina: "Tirabuccia · liquore", zona: "", foto: "strozzapreti.jpg" }
+  // Barolo Chinato Erbaluna (dalla pagina Facebook di Be Wine): tolto dalla pagina il 15 novembre 2026 perché non ha foto.
+  // Quando arriva la foto (800×1000, in img/prodotti/), rimettere questa riga dopo quella di Strozzapreti, con la virgola:
+  // { id: "barolo-chinato", sezione: "distillati", tipo: "Amari e liquori", nome: "Barolo Chinato", cantina: "Erbaluna", zona: "La Morra, Piemonte", foto: "barolo-chinato.jpg" }
+];
+
+// Birre (15 novembre 2026): niente marche, solo i tipi che tiene il titolare, nell'ordine in cui li ha detti.
+// Una riga = un tipo: sulla pagina il nome sta a sinistra e la frase a destra. Le frasi sono provvisorie: da approvare.
+window.BIRRE = [
+  { nome: "Bionda", frase: "Fresca e leggera. Quella che mette d'accordo il tavolo." },
+  { nome: "Bianca", frase: "Chiara e velata, di frumento. Profuma di agrumi." },
+  { nome: "Rossa", frase: "Ambrata e più calda. Malto tostato, un filo di caramello." },
+  { nome: "Scura", frase: "Tostata e piena. Caffè, cacao, nessuna fretta." },
+  { nome: "Weisse", frase: "Di frumento, alla tedesca. Torbida, morbida, schiuma alta." },
+  { nome: "Artigianali", frase: "Di piccoli birrifici. Chiedi cosa c'è." },
+  { nome: "Da regalo", frase: "Una birra si regala volentieri. Chiedi al banco." }
 ];
 
 // Cocktail: lista scritta sotto lo scaffale dei distillati (nome e ingredienti).
