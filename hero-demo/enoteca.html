@@ -7,28 +7,31 @@
 <meta name="robots" content="noindex, nofollow">
 <title>L'enoteca · Be Wine, Montesilvano</title>
 <meta name="description" content="L'enoteca di Be Wine a Montesilvano Marina: le cantine e i loro vini sulla mappa dell'Abruzzo.">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@500;700&family=Instrument+Serif&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="css/sito.css?v=63">
+<!-- Caratteri dal sito (cartella font/), non da Google Fonts: nessun dato dei visitatori esce dal sito -->
+<link rel="preload" href="font/dm-sans-latin.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="font/instrument-serif-latin.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="css/sito.css?v=73">
 </head>
 <body>
+  <a class="skip" href="#contenuto">Vai al contenuto</a>
   <header class="page-head page-head--light">
     <div class="bar">
       <a class="brand" href="index.html"><img src="img/logo-scuro.png" alt="Be Wine" width="776" height="254"></a>
-      <ul class="nav">
-        <li><a class="nav__link" href="index.html">Home</a></li>
-        <li><a class="nav__link" href="enoteca.html" aria-current="page">L'enoteca</a></li>
-        <li><a class="nav__link" href="birre-distillati.html">Birre e distillati</a></li>
-        <li><a class="nav__link nav__link--cta" href="https://wa.me/393351618047?text=Buonasera%2C%20vorrei%20prenotare%20un%20tavolo%20da%20Be%20Wine%20per%20" target="_blank" rel="noopener">Prenota</a></li>
-      </ul>
+      <nav class="bar__end" aria-label="Menu principale">
+        <ul class="nav">
+          <li><a class="nav__link" href="index.html">Home</a></li>
+          <li><a class="nav__link" href="enoteca.html" aria-current="page">L'enoteca</a></li>
+          <li><a class="nav__link" href="birre-distillati.html">Birre e distillati</a></li>
+          <li><a class="nav__link nav__link--cta" href="https://wa.me/393351618047?text=Buonasera%2C%20vorrei%20prenotare%20un%20tavolo%20da%20Be%20Wine%20per%20" target="_blank" rel="noopener">Prenota</a></li>
+        </ul>
+      </nav>
     </div>
     <div class="page-head__copy">
-      <h1 class="page-head__long"><span class="mark" style="--k:0">Esplora</span> le migliori <span class="mark" style="--k:1">cantine</span> <span class="fact fact--inline mark" style="--k:2">d'Abruzzo e d'Italia.</span></h1>
+      <h1 class="page-head__long"><span class="mark">Esplora</span> le nostre <span class="mark">cantine</span> <span class="fact fact--inline mark">d'Abruzzo e d'Italia.</span></h1>
     </div>
   </header>
 
-  <main>
+  <main id="contenuto" tabindex="-1">
     <div class="section cantine">
 
       <div class="shop__head">
@@ -107,18 +110,20 @@
       </div>
     </div>
     <div class="footer__legal">
+      <!-- Prima di pubblicare: dopo "Be Wine" vanno ragione sociale e partita IVA (obbligatori), es. "© 2026 Be Wine di … · P. IVA …" -->
       <p>© 2026 Be Wine</p>
       <nav aria-label="Note legali">
-        <a class="footer__link" href="#privacy">Informativa privacy</a>
-        <a class="footer__link" href="#cookie">Cookie policy</a>
+        <a class="footer__link" href="privacy.html">Informativa privacy</a>
+        <a class="footer__link" href="privacy.html#cookie">Cookie policy</a>
+        <a class="footer__link" href="privacy.html#crediti">Crediti</a>
       </nav>
     </div>
   </footer>
 
-<script src="js/sito.js?v=30"></script>
-<script src="js/prodotti.js?v=34"></script>
+<script src="js/sito.js?v=31"></script>
+<script src="js/prodotti.js?v=35"></script>
 <script src="js/cantine.js?v=30"></script>
-<script src="js/enoteca.js?v=34"></script>
-<script src="js/prenota.js?v=3"></script>
+<script src="js/enoteca.js?v=35"></script>
+<script src="js/prenota.js?v=4"></script>
 </body>
 </html>

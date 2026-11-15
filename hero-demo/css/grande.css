@@ -1,5 +1,24 @@
 /* Prova "grande": la home più vicina al riferimento (Agence Van den Abeele).
    Si carica dopo sito.css e cambia solo la pagina con <body class="grande">. */
+
+/* Fraunces: file nella cartella font/ del sito (15 novembre 2026), non più su Google Fonts. Licenza libera SIL OFL.
+   Un file solo per tutti i pesi da 300 a 500 e per tutti i tagli ottici (opsz). */
+@font-face {
+  font-family: "Fraunces";
+  font-style: normal;
+  font-weight: 300 500;
+  font-display: swap;
+  src: url("../font/fraunces-latin.woff2") format("woff2");
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+@font-face {
+  font-family: "Fraunces";
+  font-style: normal;
+  font-weight: 300 500;
+  font-display: swap;
+  src: url("../font/fraunces-latin-ext.woff2") format("woff2");
+  unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C4, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
 .grande {
   --display: "Fraunces", "Instrument Serif", Georgia, serif; /* serif larga e leggera, si legge meglio */
   --t1: 15px;   /* menu, etichette, bottoni */

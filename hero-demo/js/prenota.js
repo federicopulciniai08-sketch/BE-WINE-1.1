@@ -48,7 +48,7 @@
     '<form class="prenota" novalidate>' +
       '<div class="prenota__campo">' +
         '<label class="prenota__label" for="prenota-nome">Nome</label>' +
-        '<input class="prenota__input" id="prenota-nome" name="nome" type="text" autocomplete="given-name" autocapitalize="words" enterkeyhint="next" required>' +
+        '<input class="prenota__input" id="prenota-nome" name="nome" type="text" autocomplete="given-name" autocapitalize="words" enterkeyhint="next" maxlength="60" aria-describedby="prenota-errore-nome" required>' +
         '<p class="prenota__errore" id="prenota-errore-nome" hidden>Scrivi il tuo nome.</p>' +
       "</div>" +
       '<div class="prenota__campo">' +
@@ -63,9 +63,11 @@
         '<legend class="prenota__label">Giorno</legend>' +
         '<div class="prenota__giorni" data-giorni></div>' +
         '<input class="prenota__input prenota__altra" type="date" data-altra hidden aria-label="Scegli un altro giorno">' +
-        '<p class="prenota__errore" data-errore-giorno hidden></p>' +
+        '<p class="prenota__errore" role="alert" data-errore-giorno hidden></p>' +
       "</fieldset>" +
       '<button class="btn btn--pieno prenota__invia" type="submit">Invia su WhatsApp</button>' +
+      // Riga sulla privacy (15 novembre 2026): nome, persone e giorno restano nel browser e finiscono solo nel messaggio
+      '<p class="prenota__nota">Il sito non salva i tuoi dati: il messaggio lo invii tu da WhatsApp. <a href="privacy.html">Privacy</a></p>' +
     "</form>";
   document.body.appendChild(box);
 

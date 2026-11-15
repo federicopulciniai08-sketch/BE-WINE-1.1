@@ -61,6 +61,9 @@
       li.innerHTML = (p.foto ? '<img src="img/prodotti/' + p.foto + '" alt="" width="80" height="100">' : '<span class="sheet__nofoto" aria-hidden="true"></span>') +
         '<span><span class="tile__nick">' + p.tipo + '</span><span class="tile__name">' + p.nome + '</span>' +
         '<span class="tile__zone">' + p.cantina + '</span></span>';
+      // testo alternativo della foto: "Bottiglia di …", oppure quello scritto in "alt" in prodotti.js (per la spina)
+      var img = li.querySelector("img");
+      if (img) img.alt = p.alt || "Bottiglia di " + p.nome;
       lista.appendChild(li);
     });
     scheda.showModal();

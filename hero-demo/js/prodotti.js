@@ -1,6 +1,7 @@
 // Prodotti di prova: nomi letti dalle foto del fotografo, da confermare col titolare.
 // sezione: vini | distillati · tipo: il gruppo dentro la sezione
 // top: true = tra i più richiesti (la pagina lo scrive accanto e apre la foto di quella bottiglia)
+// alt: testo alternativo della foto, solo quando non è una bottiglia (senza, la pagina scrive "Bottiglia di" e il nome)
 // Vini → pagina L'enoteca. Distillati, birre e cocktail → pagina Birre e distillati (js/birre-distillati.js):
 // lì per aggiungere una bottiglia, un tipo di birra o un cocktail basta una riga in questo file.
 window.SEZIONI = {
@@ -19,7 +20,7 @@ window.PRODOTTI = [
   { id: "calalenta", sezione: "vini", tipo: "Rosati", nome: "Calalenta", cantina: "Fantini · Merlot", zona: "", foto: "calalenta.jpg" },
   { id: "altemasi", sezione: "vini", tipo: "Bollicine", nome: "Altemasi Millesimato", cantina: "Trento DOC Brut", zona: "Trentino", foto: "altemasi.jpg", top: true },
   // Alla spina: rosato frizzante del Veneto. Cantina, comune e uva da confermare (post su Facebook di Be Wine).
-  { id: "rosato-spina", sezione: "vini", tipo: "Rosati", nome: "Rosato frizzante alla spina", cantina: "Veneto · alla spina, anche da portare via", zona: "Veneto", foto: "spina.jpg" },
+  { id: "rosato-spina", sezione: "vini", tipo: "Rosati", nome: "Rosato frizzante alla spina", cantina: "Veneto · alla spina, anche da portare via", zona: "Veneto", foto: "spina.jpg", alt: "Rosato frizzante spillato dalle spine di rame in un bottiglione" },
 
   // Vini dalle foto della pagina Facebook di Be Wine (ricerca del 10 novembre 2026), con la cantina cercata in rete.
   // Senza foto per ora: quando arrivano, basta scrivere il nome del file in "foto" (cartella img/prodotti/).

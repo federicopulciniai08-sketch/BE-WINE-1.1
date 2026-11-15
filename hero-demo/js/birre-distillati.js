@@ -25,7 +25,7 @@
       img.loading = "lazy";
       img.width = 800;
       img.height = 1000;
-      img.alt = "";
+      img.alt = p.alt || "Bottiglia di " + p.nome; // qui sono tutte bottiglie; per una foto diversa basta "alt" in prodotti.js
       img.src = "img/prodotti/" + p.foto;
       box.appendChild(img);
     } else {
@@ -134,7 +134,9 @@
   var pannelli = Array.prototype.slice.call(document.querySelectorAll("[data-pannello]"));
   var nomi = tasti.map(function (t) { return t.dataset.tab; });
   function daIndirizzo() {
-    var h = decodeURIComponent(location.hash.replace("#", "")).toLowerCase();
+    var h = "";
+    // un indirizzo scritto male (per esempio "#%") farebbe fermare lo script: in quel caso si apre la prima scheda
+    try { h = decodeURIComponent(location.hash.replace("#", "")).toLowerCase(); } catch (e) { h = ""; }
     return nomi.indexOf(h) >= 0 ? h : null;
   }
   function apri(k) {

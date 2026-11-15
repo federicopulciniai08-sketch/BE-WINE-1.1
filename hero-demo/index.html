@@ -7,26 +7,28 @@
 <meta name="robots" content="noindex, nofollow">
 <title>Be Wine · Vineria a Montesilvano</title>
 <meta name="description" content="Vineria ed enoteca a Montesilvano Marina dal 2015: vini, birre e distillati scelti da tutta Italia. Corso Umberto I 423.">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@500;700&family=Fraunces:opsz,wght@9..144,300..500&family=Instrument+Serif&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="css/sito.css?v=70">
+<!-- Caratteri dal sito (cartella font/), non da Google Fonts: nessun dato dei visitatori esce dal sito -->
+<link rel="preload" href="font/dm-sans-latin.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="font/instrument-serif-latin.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="font/fraunces-latin.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="css/sito.css?v=73">
 <!-- Prova: più vicina al riferimento (Agence Van den Abeele), scritte più grandi e larghe -->
-<link rel="stylesheet" href="css/grande.css?v=18">
+<link rel="stylesheet" href="css/grande.css?v=19">
 </head>
 <body class="grande">
+  <a class="skip" href="#contenuto">Vai al contenuto</a>
   <header class="hero">
     <img class="hero__photo" src="img/hero.jpg" alt="Calice di vino rosso su un tavolo di legno, con una scacchiera sullo sfondo">
     <div class="bar">
       <a class="brand" href="index.html"><img class="brand__light" src="img/logo.png" alt="Be Wine" width="776" height="254"><img class="brand__dark" src="img/logo-scuro.png" alt="" width="776" height="254"></a>
-      <div class="bar__end">
+      <nav class="bar__end" aria-label="Menu principale">
         <ul class="nav">
           <li><a class="nav__link" href="index.html" aria-current="page">Home</a></li>
           <li><a class="nav__link" href="enoteca.html">L'enoteca</a></li>
           <li><a class="nav__link" href="birre-distillati.html">Birre e distillati</a></li>
           <li><a class="nav__link nav__link--cta" href="https://wa.me/393351618047?text=Buonasera%2C%20vorrei%20prenotare%20un%20tavolo%20da%20Be%20Wine%20per%20" target="_blank" rel="noopener">Prenota</a></li>
         </ul>
-      </div>
+      </nav>
     </div>
     <div class="copy">
       <h1><span>Vini d'Abruzzo,</span><span>e non solo.</span><span class="fact">Dal 2015.</span></h1>
@@ -37,7 +39,7 @@
     </div>
   </header>
 
-  <main>
+  <main id="contenuto" tabindex="-1">
     <section class="section about" id="chi-siamo" aria-labelledby="about-title">
       <div class="about__inner">
         <h2 class="title about__title" id="about-title">Chi siamo<span class="fact">.</span></h2>
@@ -78,19 +80,20 @@
         <p class="label">Dicono di noi</p>
         <h2 class="title" id="reviews-title">4,7 su Google, <span class="fact">158 recensioni.</span></h2>
       </div>
+      <!-- Autori con nome e iniziale (15 novembre 2026): i nomi completi restano su Google. "La Bambi" è già un soprannome. -->
       <ul class="reviews__list">
         <li class="review">
-          <p class="review__stars" aria-label="5 stelle su 5">★★★★★</p>
+          <p class="review__stars" role="img" aria-label="5 stelle su 5">★★★★★</p>
           <blockquote class="review__quote">“Abbiamo trovato professionalità, cordialità e accoglienza. Il proprietario è un ragazzo preparato su tutti i vini che ci ha elencato e sa anche ascoltare i gusti del cliente.”</blockquote>
-          <p class="review__author">Serena Sofia Diana</p>
+          <p class="review__author">Serena S.</p>
         </li>
         <li class="review">
-          <p class="review__stars" aria-label="5 stelle su 5">★★★★★</p>
+          <p class="review__stars" role="img" aria-label="5 stelle su 5">★★★★★</p>
           <blockquote class="review__quote">“Un posto davvero piacevole dove gustarsi del buon vino chiacchierando con amici, nella sua semplicità è speciale!”</blockquote>
-          <p class="review__author">Roberta Pavone</p>
+          <p class="review__author">Roberta P.</p>
         </li>
         <li class="review">
-          <p class="review__stars" aria-label="5 stelle su 5">★★★★★</p>
+          <p class="review__stars" role="img" aria-label="5 stelle su 5">★★★★★</p>
           <blockquote class="review__quote">“Se vuoi bere una buona bottiglia di vino a prezzi onesti questo è il posto giusto! Il proprietario se sei indeciso saprà consigliarti nel modo giusto.”</blockquote>
           <p class="review__author">La Bambi · Local Guide</p>
         </li>
@@ -137,16 +140,18 @@
       </div>
     </div>
     <div class="footer__legal">
+      <!-- Prima di pubblicare: dopo "Be Wine" vanno ragione sociale e partita IVA (obbligatori), es. "© 2026 Be Wine di … · P. IVA …" -->
       <p>© 2026 Be Wine</p>
       <nav aria-label="Note legali">
-        <a class="footer__link" href="#privacy">Informativa privacy</a>
-        <a class="footer__link" href="#cookie">Cookie policy</a>
+        <a class="footer__link" href="privacy.html">Informativa privacy</a>
+        <a class="footer__link" href="privacy.html#cookie">Cookie policy</a>
+        <a class="footer__link" href="privacy.html#crediti">Crediti</a>
       </nav>
     </div>
   </footer>
 
-<script src="js/sito.js?v=30"></script>
+<script src="js/sito.js?v=31"></script>
 <script src="js/grande.js?v=6"></script>
-<script src="js/prenota.js?v=3"></script>
+<script src="js/prenota.js?v=4"></script>
 </body>
 </html>

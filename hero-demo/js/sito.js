@@ -39,8 +39,8 @@ document.querySelectorAll(".nav__link").forEach(function (link) {
   menu.id = "menu-telefono";
   menu.setAttribute("aria-label", "Menu");
   var voci = Array.prototype.filter.call(nav.querySelectorAll(".nav__link"), function (a) { return a !== prenota; })
-    .map(function (a, i) {
-      return '<a class="menu__voce" style="--i:' + i + '" href="' + a.getAttribute("href") + '"' +
+    .map(function (a) {
+      return '<a class="menu__voce" href="' + a.getAttribute("href") + '"' +
         (a.hasAttribute("aria-current") ? ' aria-current="page"' : "") + ">" + a.textContent + "</a>";
     }).join("");
   menu.innerHTML =
@@ -57,6 +57,9 @@ document.querySelectorAll(".nav__link").forEach(function (link) {
       '<li class="menu__dove">Corso Umberto I, 423 · Montesilvano<br>Martedì – venerdì 17–24 · Sabato 18–24</li>' +
     "</ul>";
   document.body.appendChild(menu);
+  // le voci entrano una dopo l'altra: il ritardo si mette da qui e non con un attributo style nell'HTML,
+  // così le regole di sicurezza (Content-Security-Policy in vercel.json) possono vietare gli stili scritti nella pagina
+  Array.prototype.forEach.call(menu.querySelectorAll(".menu__voce"), function (a, i) { a.style.setProperty("--i", i); });
 
   function chiudi() { if (menu.open) menu.close(); }
   btn.addEventListener("click", function () {
