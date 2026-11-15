@@ -253,7 +253,7 @@ main { background: var(--cream); color: var(--text); }
   grid-column: 2;
   justify-self: end; /* una parola lunga sporge a sinistra, verso la foto, mai sulla frase */
   font-family: var(--serif);
-  font-size: clamp(56px, 6.4vw, 92px);
+  font-size: clamp(36px, 4vw, 56px); /* sempre più piccole del titolo "Chi siamo." (88 px) */
   line-height: 1;
   text-align: right;
   white-space: nowrap;
@@ -406,7 +406,7 @@ main { background: var(--cream); color: var(--text); }
   .about__title { margin-bottom: var(--u3); }
   .about__item { grid-template-columns: 1fr auto; column-gap: var(--u3); row-gap: var(--u3); align-items: end; min-height: 0; }
   .about__item + .about__item { margin-top: var(--u4); }
-  .about__word { grid-column: 1; grid-row: 1; justify-self: start; font-size: 54px; text-align: left; }
+  .about__word { grid-column: 1; grid-row: 1; justify-self: start; font-size: 32px; text-align: left; }
   .about__note { grid-column: 1 / -1; grid-row: 2; max-width: none; font-size: 16px; }
   .about__photo { position: relative; left: auto; top: auto; translate: none; grid-column: 2; grid-row: 1; margin-right: var(--u2); }
   .about__photo::before { translate: 6px 7px; }
