@@ -67,12 +67,15 @@ document.querySelectorAll(".nav__link").forEach(function (link) {
   // Apertura e chiusura animate (21 novembre 2026): il menu entra da destra, dal lato del tasto toccato,
   // ed esce dalla stessa parte. È una transizione e non un'animazione fissa: se si tocca di nuovo a metà,
   // il pannello torna indietro da dove si trova, senza salti. Il dialogo si chiude davvero solo a pannello uscito.
-  function apri() {
-    // la riga in alto del menu cade dove sta la barra, qualunque pagina sia
-    menu.style.setProperty("--menu-su", Math.max(0, btn.getBoundingClientRect().top) + "px");
+  var tasti = [btn]; // i tasti che aprono il menu: quello della barra e, nella home, quello della barra che ricompare
+  function segna(aperto) { tasti.forEach(function (t) { t.setAttribute("aria-expanded", String(aperto)); }); }
+  function apri(e) {
+    // la riga in alto del menu cade dove sta il tasto toccato, qualunque pagina sia
+    var da = (e && e.currentTarget) || btn;
+    menu.style.setProperty("--menu-su", Math.max(0, da.getBoundingClientRect().top) + "px");
     if (!menu.open) menu.showModal();
     document.documentElement.classList.add("menu-aperto");
-    btn.setAttribute("aria-expanded", "true");
+    segna(true);
     void menu.offsetWidth; // il browser registra il pannello fuori schermo, così la transizione parte
     menu.classList.add("is-open");
     menu.querySelector(".menu__chiudi").focus();
@@ -80,7 +83,7 @@ document.querySelectorAll(".nav__link").forEach(function (link) {
   function chiudi() {
     if (!menu.open || !menu.classList.contains("is-open")) return;
     menu.classList.remove("is-open");
-    btn.setAttribute("aria-expanded", "false");
+    segna(false);
     var fatto = false;
     function fine(e) {
       if (fatto || (e && e.target !== menu)) return;
@@ -97,12 +100,54 @@ document.querySelectorAll(".nav__link").forEach(function (link) {
   menu.addEventListener("close", function () {
     menu.classList.remove("is-open");
     document.documentElement.classList.remove("menu-aperto");
-    btn.setAttribute("aria-expanded", "false");
+    segna(false);
   });
   menu.querySelector(".menu__chiudi").addEventListener("click", chiudi);
   // un tocco su una voce chiude il menu (il modulo Prenota si apre poi da solo)
   menu.addEventListener("click", function (e) { if (e.target.closest("a")) chiudi(); });
   if (telefono.addEventListener) telefono.addEventListener("change", function () { if (!telefono.matches) chiudi(); });
+
+  // Barra che ricompare risalendo (21 novembre 2026): solo nella home e solo su telefono.
+  // Quando la barra della foto è uscita dallo schermo, scorrendo verso l'alto scende dall'alto una barra crema
+  // con logo e tasto menu (stesso stile della barra rapida); scorrendo verso il basso torna su e lascia spazio.
+  // Tornati in cima sparisce: lì c'è già la barra bianca sulla foto.
+  if (!bar.closest(".hero")) return;
+  var testa = document.createElement("div");
+  testa.className = "testa";
+  testa.innerHTML =
+    '<a class="testa__brand" href="index.html"><img class="testa__scuro" src="img/logo-scuro.png" alt="Be Wine" width="776" height="254">' +
+      '<img class="testa__chiaro" src="img/logo.png" alt="" width="776" height="254"></a>' +
+    '<button class="menu-btn testa__menu" type="button" aria-label="Apri il menu" aria-expanded="false" aria-controls="menu-telefono">' +
+      "<span></span><span></span><span></span></button>";
+  document.body.appendChild(testa);
+  var btnTesta = testa.querySelector(".testa__menu");
+  btnTesta.addEventListener("click", apri);
+  tasti.push(btnTesta);
+
+  var SOGLIA = 8; // pixel di scorrimento prima di cambiare idea: i piccoli tremolii del dito non contano
+  var ultimo = window.scrollY;
+  var visibile = false;
+  var inCoda = false;
+  function mostra(si) {
+    if (si === visibile) return;
+    visibile = si;
+    testa.classList.toggle("is-visible", si);
+    testa.toggleAttribute("inert", !si); // nascosta, non si raggiunge col tasto Tab
+  }
+  testa.setAttribute("inert", "");
+  var piede = document.querySelector(".footer");
+  function guarda() {
+    inCoda = false;
+    var y = window.scrollY;
+    // sopra il piede color vino la barra a vetro diventa chiara: logo e tre linee bianchi, come sulla foto
+    testa.classList.toggle("su-scuro", !!piede && piede.getBoundingClientRect().top < testa.offsetHeight);
+    // la barra della foto è ancora sullo schermo (o non siamo su telefono): la barra crema non serve
+    if (!telefono.matches || bar.getBoundingClientRect().bottom > 0) { mostra(false); ultimo = y; return; }
+    if (y < ultimo - SOGLIA) { mostra(true); ultimo = y; }
+    else if (y > ultimo + SOGLIA) { mostra(false); ultimo = y; }
+  }
+  window.addEventListener("scroll", function () { if (!inCoda) { inCoda = true; requestAnimationFrame(guarda); } }, { passive: true });
+  if (telefono.addEventListener) telefono.addEventListener("change", guarda);
 })();
 
 // Barra rapida con Prenota: compare quando il menu e il tasto Prenota della prima schermata
