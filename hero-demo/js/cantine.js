@@ -26,7 +26,7 @@ window.CANTINE_ENOTECA = [
     nome: "Praesidium",
     comune: "Prezza",
     zona: "Prezza (AQ)",
-    testo: "Piccola azienda di famiglia nella Valle Peligna, in quota. Il suo rosso di punta è la Riserva, che vale la pena aspettare.",
+    testo: "Piccola azienda di famiglia nella Valle Peligna, in quota. Il suo rosso di punta è la Riserva.",
     bottiglie: ["praesidium"]
   },
   {
@@ -44,7 +44,7 @@ window.CANTINE_ENOTECA = [
     nome: "Fantini",
     comune: "Ortona",
     zona: "Ortona (CH)",
-    testo: "Una delle firme abruzzesi più conosciute, a mezz'ora dal locale. Dal rosso importante al vino da aperitivo. Amami è della loro linea Cinquesegni, con uve di Puglia.",
+    testo: "Una delle firme abruzzesi più conosciute, a circa mezz'ora da Montesilvano, con vini che vanno dai rossi importanti a quelli da aperitivo. Amami è della loro linea Cinquesegni, con uve di Puglia.",
     bottiglie: ["doncamillo", "calalenta", "opi", "amami"]
   },
   {
@@ -61,7 +61,7 @@ window.CANTINE_ENOTECA = [
     nome: "Altemasi",
     comune: "Trento",
     zona: "Trento",
-    testo: "Metodo classico Trento DOC, dalle colline del Trentino. Il Millesimato è la bottiglia per le occasioni.",
+    testo: "Metodo classico Trento DOC, dalle colline del Trentino. Il Millesimato è indicato per le occasioni importanti.",
     bottiglie: ["altemasi"]
   },
   {
@@ -70,7 +70,7 @@ window.CANTINE_ENOTECA = [
     soprannome: "Alla spina",
     nome: "Rosato frizzante",
     zona: "Veneto", // cantina da confermare col titolare
-    testo: "Il rosato frizzante che esce dalle spine di rame del bancone. Si beve al banco o si porta via.",
+    testo: "Rosato frizzante servito dalle spine di rame del bancone, da bere sul posto o da asporto.",
     bottiglie: ["rosato-spina"]
   },
   // ---- Cantine dalle foto della pagina Facebook di Be Wine (10 novembre 2026): cantina e comune cercati in rete. ----
@@ -90,7 +90,7 @@ window.CANTINE_ENOTECA = [
     nome: "Monteselva",
     comune: "Montesilvano",
     zona: "Montesilvano (PE)",
-    testo: "La cantina di casa: sta a Montesilvano, come Be Wine. Ilikias è il loro Montepulciano da vigne vecchie.",
+    testo: "Cantina con sede a Montesilvano, come Be Wine. Ilikias è il suo Montepulciano da vigne vecchie.",
     bottiglie: ["ilikias"]
   },
   {
@@ -188,7 +188,7 @@ window.CANTINE_ENOTECA = [
     nome: "Illuminati",
     comune: "Controguerra",
     zona: "Controguerra (TE)",
-    testo: "Fanno vino dal 1890, al confine con le Marche. Pieluni è il loro rosso di punta.",
+    testo: "Produce vino dal 1890, al confine con le Marche. Pieluni è il suo rosso di punta.",
     bottiglie: ["pieluni"]
   },
   {

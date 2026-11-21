@@ -54,7 +54,7 @@ document.querySelectorAll(".nav__link").forEach(function (link) {
       '<li><a href="tel:+393351618047">Chiama 335 161 8047</a></li>' +
       '<li><a href="https://www.instagram.com/bewinemontesilvano/" target="_blank" rel="noopener">Instagram</a></li>' +
       '<li><a href="https://www.facebook.com/BeWinePescara/" target="_blank" rel="noopener">Facebook</a></li>' +
-      '<li class="menu__dove">Corso Umberto I, 423 · Montesilvano<br>Martedì – venerdì 17–24 · Sabato 18–24</li>' +
+      '<li class="menu__dove">Corso Umberto I, 423 · Montesilvano<br>Martedì – sabato 17–00:30</li>' +
     "</ul>";
   document.body.appendChild(menu);
   // le voci entrano una dopo l'altra: il ritardo si mette da qui e non con un attributo style nell'HTML,

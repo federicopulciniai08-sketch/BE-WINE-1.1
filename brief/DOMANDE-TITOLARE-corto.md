@@ -13,7 +13,7 @@
 
 ## Per mettere il sito in regola (15 novembre 2026)
 
-Senza queste risposte il sito non si può pubblicare. Il perché di ognuna è in `DECISIONI.md`, "Sicurezza e regole".
+Senza queste risposte il sito non si può pubblicare. Il perché di ognuna è in `DECISIONI.md`, "Privacy e regole".
 
 11. **Dati dell'attività**, come sono sulla visura o sulle fatture: ragione sociale (o nome e cognome, se è una ditta individuale), partita IVA, sede legale, un'email a cui i clienti possono scrivere (meglio se anche la PEC). Se è una società: numero REA e capitale sociale.
 12. **Foto del fotografo**: chi le ha fatte? Serve il suo permesso scritto a usarle sul sito e sui social (basta la risposta al messaggio qui sotto). Vuole il suo nome nei crediti?
@@ -27,3 +27,16 @@ Senza queste risposte il sito non si può pubblicare. Il perché di ognuna è in
 **Messaggio da mandare al fotografo** (la sua risposta scritta vale come permesso):
 
 > Ciao, per il nuovo sito di Be Wine usiamo le foto che hai fatto al locale e alle bottiglie. Mi confermi per iscritto che Be Wine può usarle sul sito, sui social e sul materiale del locale, senza limiti di tempo? Dimmi anche se vuoi il tuo nome nei crediti e come va scritto. Grazie!
+
+## Risposte (17 novembre 2026)
+1. Orari: martedì–sabato dalle 17 alla chiusura (verso le 00:30), domenica e lunedì chiuso. Ultimo orario per prenotare: non detto.
+2. WhatsApp 335 161 8047, confermato.
+3. Civico 423 (la scheda Google dice 421: da correggere).
+10 e 15. Nessun sovrapprezzo per bere sul posto.
+11. Dati dell'attività: in arrivo.
+12. Permesso del fotografo: rimandato.
+13. Foto di apertura: è la foto di Be Wine su Facebook, ritoccata con l'IA. Si tiene.
+14. Conservazione delle chat: per ora non si scrive.
+16. I più richiesti (Tanqueray No. Ten, Don Papa Baroko): confermati.
+Cocktail, birre "da regalo" e vini senza cantina: non si specificano sul sito.
+Ancora senza risposta: 4 (persone massime e coperti), 5-9, 17 (le tre recensioni in home).

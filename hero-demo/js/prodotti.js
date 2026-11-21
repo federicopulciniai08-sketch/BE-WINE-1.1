@@ -80,14 +80,15 @@ window.PRODOTTI = [
 
 // Birre (15 novembre 2026): niente marche, solo i tipi che tiene il titolare, nell'ordine in cui li ha detti.
 // Una riga = un tipo: sulla pagina il nome sta a sinistra e la frase a destra. Le frasi sono provvisorie: da approvare.
+// Registro formale e impersonale dal 21 novembre 2026 (niente "tu", niente imperativi rivolti al cliente).
 window.BIRRE = [
-  { nome: "Bionda", frase: "Fresca e leggera. Quella che mette d'accordo il tavolo." },
-  { nome: "Bianca", frase: "Chiara e velata, di frumento. Profuma di agrumi." },
-  { nome: "Rossa", frase: "Ambrata e più calda. Malto tostato, un filo di caramello." },
-  { nome: "Scura", frase: "Tostata e piena. Caffè, cacao, nessuna fretta." },
-  { nome: "Weisse", frase: "Di frumento, alla tedesca. Torbida, morbida, schiuma alta." },
-  { nome: "Artigianali", frase: "Di piccoli birrifici. Chiedi cosa c'è." },
-  { nome: "Da regalo", frase: "Una birra si regala volentieri. Chiedi al banco." }
+  { nome: "Bionda", frase: "Fresca e leggera, adatta a ogni occasione." },
+  { nome: "Bianca", frase: "Chiara e velata, di frumento, con profumi di agrumi." },
+  { nome: "Rossa", frase: "Ambrata e più calda, con note di malto tostato e caramello." },
+  { nome: "Scura", frase: "Tostata e piena, con note di caffè e cacao." },
+  { nome: "Weisse", frase: "Di frumento, in stile tedesco: torbida, morbida, con schiuma abbondante." },
+  { nome: "Artigianali", frase: "Di piccoli birrifici, con disponibilità variabile." },
+  { nome: "Da regalo", frase: "Disponibili su richiesta, al banco." }
 ];
 
 // Cocktail: lista scritta sotto lo scaffale dei distillati (nome e ingredienti).

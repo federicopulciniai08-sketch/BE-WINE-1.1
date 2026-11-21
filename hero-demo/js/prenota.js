@@ -6,9 +6,9 @@
   if (!window.HTMLDialogElement) return;
 
   var NUMERO_WA = "393351618047";
-  // 0 = domenica … 6 = sabato. Orari da DECISIONI.md, da confermare col titolare.
-  var ORARI = { 2: [17, 24], 3: [17, 24], 4: [17, 24], 5: [17, 24], 6: [18, 24] };
-  var ULTIMO_ARRIVO = 22.5; // dopo le 22:30 "stasera" non si propone più
+  // 0 = domenica … 6 = sabato. Orari confermati dal titolare il 17 novembre 2026: martedì-sabato dalle 17, chiusura verso le 00:30.
+  var ORARI = { 2: [17, 24.5], 3: [17, 24.5], 4: [17, 24.5], 5: [17, 24.5], 6: [17, 24.5] };
+  var ULTIMO_ARRIVO = 22.5; // dopo le 22:30 "stasera" non si propone più (ultimo arrivo ancora da confermare col titolare)
   var GIORNI_MOSTRATI = 6;
   var MAX_PERSONE = 20;
 
@@ -49,7 +49,7 @@
       '<div class="prenota__campo">' +
         '<label class="prenota__label" for="prenota-nome">Nome</label>' +
         '<input class="prenota__input" id="prenota-nome" name="nome" type="text" autocomplete="given-name" autocapitalize="words" enterkeyhint="next" maxlength="60" aria-describedby="prenota-errore-nome" required>' +
-        '<p class="prenota__errore" id="prenota-errore-nome" hidden>Scrivi il tuo nome.</p>' +
+        '<p class="prenota__errore" id="prenota-errore-nome" hidden>Inserire il nome.</p>' +
       "</div>" +
       '<div class="prenota__campo">' +
         '<span class="prenota__label" id="prenota-persone-label">Persone</span>' +
@@ -62,12 +62,12 @@
       '<fieldset class="prenota__campo">' +
         '<legend class="prenota__label">Giorno</legend>' +
         '<div class="prenota__giorni" data-giorni></div>' +
-        '<input class="prenota__input prenota__altra" type="date" data-altra hidden aria-label="Scegli un altro giorno">' +
+        '<input class="prenota__input prenota__altra" type="date" data-altra hidden aria-label="Altra data">' +
         '<p class="prenota__errore" role="alert" data-errore-giorno hidden></p>' +
       "</fieldset>" +
       '<button class="btn btn--pieno prenota__invia" type="submit">Invia su WhatsApp</button>' +
-      // Riga sulla privacy (15 novembre 2026): nome, persone e giorno restano nel browser e finiscono solo nel messaggio
-      '<p class="prenota__nota">Il sito non salva i tuoi dati: il messaggio lo invii tu da WhatsApp. <a href="privacy.html">Privacy</a></p>' +
+      // Riga sulla privacy (15 novembre 2026, in forma impersonale dal 21 novembre): nome, persone e giorno restano nel browser e finiscono solo nel messaggio
+      '<p class="prenota__nota">I dati inseriti non vengono salvati dal sito: il messaggio è inviato dall\u2019utente tramite WhatsApp. <a href="privacy.html">Informativa privacy</a></p>' +
     "</form>";
   document.body.appendChild(box);
 
@@ -121,6 +121,9 @@
     return altra.value ? daIso(altra.value) : null;
   }
 
+  // registro formale e impersonale (21 novembre 2026), come il resto del sito
+  function chiusoIl(d) { return "Il locale è chiuso " + giorniLunghi.format(d) + ": selezionare un altro giorno."; }
+
   function segnalaGiorno(testo) {
     erroreGiorno.textContent = testo || "";
     erroreGiorno.hidden = !testo;
@@ -137,7 +140,7 @@
   });
   altra.addEventListener("change", function () {
     var d = giornoScelto();
-    segnalaGiorno(d && !ORARI[d.getDay()] ? "Il " + giorniLunghi.format(d) + " siamo chiusi: scegli un altro giorno." : "");
+    segnalaGiorno(d && !ORARI[d.getDay()] ? chiusoIl(d) : "");
   });
   campoNome.addEventListener("input", function () {
     if (campoNome.value.trim()) { erroreNome.hidden = true; campoNome.removeAttribute("aria-invalid"); }
@@ -150,8 +153,8 @@
     var chiuso = d && !ORARI[d.getDay()];
     erroreNome.hidden = !!nome;
     if (nome) campoNome.removeAttribute("aria-invalid"); else campoNome.setAttribute("aria-invalid", "true");
-    if (!d) segnalaGiorno("Scegli il giorno.");
-    else if (chiuso) segnalaGiorno("Il " + giorniLunghi.format(d) + " siamo chiusi: scegli un altro giorno.");
+    if (!d) segnalaGiorno("Selezionare il giorno.");
+    else if (chiuso) segnalaGiorno(chiusoIl(d));
     if (!nome) { campoNome.focus(); return; }
     if (!d || chiuso) { (altra.hidden ? boxGiorni.querySelector("input") : altra).focus(); return; }
 
