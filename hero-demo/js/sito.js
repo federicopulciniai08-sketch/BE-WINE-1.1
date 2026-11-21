@@ -1,3 +1,6 @@
+// Su iPhone Safari lo stato :active (la risposta al tocco dei tasti) si vede solo se la pagina ascolta i tocchi.
+document.addEventListener("touchstart", function () {}, { passive: true });
+
 // Un clic veloce dura meno di 100 ms: tengo lo stato "premuto" almeno 160 ms
 // perché colore e ingrandimento si vedano davvero.
 document.querySelectorAll(".nav__link").forEach(function (link) {
@@ -61,16 +64,38 @@ document.querySelectorAll(".nav__link").forEach(function (link) {
   // così le regole di sicurezza (Content-Security-Policy in vercel.json) possono vietare gli stili scritti nella pagina
   Array.prototype.forEach.call(menu.querySelectorAll(".menu__voce"), function (a, i) { a.style.setProperty("--i", i); });
 
-  function chiudi() { if (menu.open) menu.close(); }
-  btn.addEventListener("click", function () {
+  // Apertura e chiusura animate (21 novembre 2026): il menu entra da destra, dal lato del tasto toccato,
+  // ed esce dalla stessa parte. È una transizione e non un'animazione fissa: se si tocca di nuovo a metà,
+  // il pannello torna indietro da dove si trova, senza salti. Il dialogo si chiude davvero solo a pannello uscito.
+  function apri() {
     // la riga in alto del menu cade dove sta la barra, qualunque pagina sia
     menu.style.setProperty("--menu-su", Math.max(0, btn.getBoundingClientRect().top) + "px");
-    menu.showModal();
+    if (!menu.open) menu.showModal();
     document.documentElement.classList.add("menu-aperto");
     btn.setAttribute("aria-expanded", "true");
+    void menu.offsetWidth; // il browser registra il pannello fuori schermo, così la transizione parte
+    menu.classList.add("is-open");
     menu.querySelector(".menu__chiudi").focus();
-  });
+  }
+  function chiudi() {
+    if (!menu.open || !menu.classList.contains("is-open")) return;
+    menu.classList.remove("is-open");
+    btn.setAttribute("aria-expanded", "false");
+    var fatto = false;
+    function fine(e) {
+      if (fatto || (e && e.target !== menu)) return;
+      fatto = true;
+      menu.removeEventListener("transitionend", fine);
+      if (!menu.classList.contains("is-open")) menu.close(); // riaperto nel frattempo: resta aperto
+    }
+    menu.addEventListener("transitionend", fine);
+    setTimeout(fine, 500); // se la transizione non parte (scheda in secondo piano), si chiude lo stesso
+  }
+  btn.addEventListener("click", apri);
+  // Esc: chiusura animata anche da tastiera
+  menu.addEventListener("cancel", function (e) { e.preventDefault(); chiudi(); });
   menu.addEventListener("close", function () {
+    menu.classList.remove("is-open");
     document.documentElement.classList.remove("menu-aperto");
     btn.setAttribute("aria-expanded", "false");
   });

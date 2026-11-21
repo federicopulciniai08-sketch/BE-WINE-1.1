@@ -272,3 +272,24 @@
 
 /* Chi siamo riceve il fuoco dopo lo scorrimento del cerchio: niente riquadro attorno alla sezione */
 .grande .about:focus { outline: none; }
+
+/* ================= Telefono: barra trasparente come il riferimento (21 novembre 2026) =================
+   Su agencevandenabeele.be/nl logo e tasto menu stanno bianchi direttamente sulla foto, senza fondo.
+   In cima alla foto un'ombra leggera tiene leggibili logo e tre linee anche dove la foto è chiara. */
+@media (max-width: 760px) {
+  .grande .hero .bar {
+    background: none;
+    -webkit-backdrop-filter: none;
+    backdrop-filter: none;
+  }
+  .grande .hero .brand__light { display: block !important; }
+  .grande .hero .brand__dark { display: none !important; }
+  .grande .hero .brand__light { filter: drop-shadow(0 1px 8px rgba(var(--shade), .35)); }
+  .grande .hero .menu-btn { color: var(--ink); filter: drop-shadow(0 1px 6px rgba(var(--shade), .45)); }
+  .grande .hero .menu-btn:focus-visible { outline-color: var(--ink); }
+  .grande .hero::before {
+    background:
+      linear-gradient(180deg, rgba(var(--shade), .6) 0%, rgba(var(--shade), 0) 24%),
+      linear-gradient(0deg, rgba(var(--shade), .88) 0%, rgba(var(--shade), .55) 50%, rgba(var(--shade), .12) 100%);
+  }
+}
